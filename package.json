@@ -81,10 +81,8 @@
                     "BBlang",
                     "bbc"
                 ],
-                "extensions": [
-                    ".bbc"
-                ],
-                "configuration": "./language-configuration.json",
+                "extensions": [ ".bbc" ],
+                "configuration": "./langs/bblang.json",
                 "icon": {
                     "dark": "./icons/files/bbc.svg",
                     "light": "./icons/files/bbc.svg"
@@ -92,12 +90,30 @@
             },
             {
                 "id": "bblang-test-result",
-                "aliases": [
-                    "bblang-test-result"
-                ],
-                "extensions": [
-                    ".result"
-                ]
+                "aliases": [ ],
+                "extensions": [ ".result" ],
+                "icon": {
+                    "dark": "./icons/files/bbc-result.svg",
+                    "light": "./icons/files/bbc-result.svg"
+                }
+            },
+            {
+                "id": "bblang-notebook",
+                "aliases": [],
+                "extensions": [ ".bbnb" ],
+                "icon": {
+                    "dark": "./icons/files/bbc-notebook.svg",
+                    "light": "./icons/files/bbc-notebook.svg"
+                }
+            },
+            {
+                "id": "bblang-config",
+                "aliases": [],
+                "filenames": [ "bbl.conf" ],
+                "icon": {
+                    "dark": "./icons/files/bbc-config.svg",
+                    "light": "./icons/files/bbc-config.svg"
+                }
             }
         ],
         "grammars": [
@@ -116,6 +132,10 @@
             {
                 "language": "bbc",
                 "path": "./snippets/bblang.json"
+            },
+            {
+                "language": "bblang-test-result",
+                "path": "./snippets/bblang-test-result.json"
             }
         ],
         "commands": [

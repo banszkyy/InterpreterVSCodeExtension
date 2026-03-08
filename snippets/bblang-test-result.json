@@ -1,0 +1,8 @@
+{
+    "exitcode": {
+		"prefix": "exitcode",
+		"body": [
+			"#exitcode ${1:0}"
+		]
+	}
+}
