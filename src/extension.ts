@@ -5,6 +5,7 @@ import * as updater from './updater'
 import * as config from './config'
 import { isVirtualWorkspace, languageId } from './utils'
 import * as notebookSerializer from './notebook-serializer'
+import * as notebookController from './notebook-controller'
 
 export let log: vscode.LogOutputChannel
 const checkForUpdates = true
@@ -23,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
     languageClient.activate(context)
 
     notebookSerializer.activate(context)
+    notebookController.activate(context)
 
     function interactiveUpdateAll() {
         if (!isVirtual && checkForUpdates) {

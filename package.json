@@ -32,17 +32,6 @@
             "title": "BBlang",
             "type": "object",
             "properties": {
-                "bblang.server.trace": {
-                    "type": "string",
-                    "enum": [
-                        "off",
-                        "messages",
-                        "verbose"
-                    ],
-                    "default": "off",
-                    "description": "Traces the communication between VSCode and the language server service",
-                    "scope": "resource"
-                },
                 "bblang.server.path": {
                     "type": "string",
                     "description": "Sets the path of the language server binary",
@@ -282,6 +271,7 @@
     },
     "dependencies": {
         "adm-zip": "latest",
+        "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "latest"
     },
     "capabilities": {

@@ -64,7 +64,6 @@ export function getConfig() {
             githubRepository: 'BBLang-LanguageServer',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('server.path', path.join(__dirname, 'language-server', `LanguageServer${executableFileExtension}`)),
-            server: config.get<'off' | 'messages' | 'verbose'>('server.trace', 'off'),
             pathConfigKey: 'server.path',
         },
         debugServer: {

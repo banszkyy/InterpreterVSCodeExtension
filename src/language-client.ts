@@ -63,7 +63,7 @@ export class LanguageClientManager implements Disposable {
             }],
             synchronize: {
                 configurationSection: `${utils.extensionConfigName}.server`,
-                fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc'),
+                fileEvents: vscode.workspace.createFileSystemWatcher('**/.bbc'),
             },
             diagnosticPullOptions: {
                 onChange: true,
@@ -79,6 +79,7 @@ export class LanguageClientManager implements Disposable {
             serverOptions,
             clientOptions
         )
+        this.client.registerProposedFeatures()
 
         interface CompilerStatusNotificationArgs {
             status: 'done' | 'failed' | 'working'
@@ -197,29 +198,6 @@ export class LanguageClientManager implements Disposable {
         this.client.debug = () => { }
 
         log.debug(`[Language] Language server created`, serverOptions)
-
-        //this.client.onNotification(LogMessageNotification.type, (params) => {
-        //    switch (params.type) {
-        //        case MessageType.Debug:
-        //            console.debug('[LanguageServer]:', params.message)
-        //            break
-        //        case MessageType.Log:
-        //            console.log('[LanguageServer]:', params.message)
-        //            break
-        //        case MessageType.Info:
-        //            console.info('[LanguageServer]:', params.message)
-        //            break
-        //        case MessageType.Warning:
-        //            console.warn('[LanguageServer]:', params.message)
-        //            break
-        //        case MessageType.Error:
-        //            console.error('[LanguageServer]:', params.message)
-        //            break
-        //        default:
-        //            console.log('[LanguageServer]:', params.message)
-        //            break
-        //    }
-        //})
 
         this.context = context
     }
