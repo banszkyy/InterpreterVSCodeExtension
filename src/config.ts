@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as utils from './utils'
+import { UpdateOptions } from './updater'
 
 const dotnetRID = (() => {
     switch (process.platform) {
@@ -31,48 +32,30 @@ const executableFileExtension = (() => {
     }
 })()
 
-/**
- * @param filepath If provided it'll use the file's workspace folder as scope, otherwise it'll try to get the current active filepath.
- * @returns The workspace configuration for this extension _('batchrunner')_
- */
-function getExtensionConfig(filepath?: string): vscode.WorkspaceConfiguration {
-    // Try to get the active workspace folder first, to have it read Folder Settings
-    let workspaceFolder: vscode.WorkspaceFolder | null = null
-    if (filepath) {
-        workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(filepath)) ?? null
-    }
-    else if (vscode.window.activeTextEditor) {
-        workspaceFolder = vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri) ?? null
-    }
-
-    return vscode.workspace.getConfiguration(utils.extensionConfigName, workspaceFolder?.uri)
-}
-
 export function getConfig() {
-    const config = getExtensionConfig()
+    const config = vscode.workspace.getConfiguration(utils.extensionConfigName, vscode.window.activeTextEditor ? (vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri)?.uri ?? null) : null)
     return Object.freeze({
         runtime: {
             githubUsername: 'BBpezsgo',
             githubRepository: 'BBLang',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
-            path: config.get<string>('runtime.path', path.join(__dirname, 'runtime', `interpreter${executableFileExtension}`)),
-            executeIn: config.get<'Terminal' | 'External'>('runtime.executein', 'Terminal'),
+            path: config.get<string>('runtime.path', path.join(__dirname, 'runtime', `bblang${executableFileExtension}`)),
             pathConfigKey: 'runtime.path',
-        },
+        } as UpdateOptions,
         languageServer: {
             githubUsername: 'BBpezsgo',
             githubRepository: 'BBLang-LanguageServer',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
-            path: config.get<string>('server.path', path.join(__dirname, 'language-server', `LanguageServer${executableFileExtension}`)),
+            path: config.get<string>('server.path', path.join(__dirname, 'language-server', `bblang_languageserver${executableFileExtension}`)),
             pathConfigKey: 'server.path',
-        },
+        } as UpdateOptions,
         debugServer: {
             githubUsername: 'BBpezsgo',
-            githubRepository: '',
+            githubRepository: 'BBLang-DebugHost',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
-            path: config.get<string>('debug.server.path', path.join(__dirname, 'debug-server', `DebugServer${executableFileExtension}`)),
+            path: config.get<string>('debug.server.path', path.join(__dirname, 'debug-server', `bblang_debughost${executableFileExtension}`)),
             pathConfigKey: 'debug.server.path',
-        },
+        } as UpdateOptions,
     })
 }
 

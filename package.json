@@ -11,7 +11,11 @@
     },
     "categories": [
         "Programming Languages",
-        "Snippets"
+        "Snippets",
+        "Debuggers"
+    ],
+    "keywords": [
+        "bblang", "bbc", "banszky", "embedded", "language"
     ],
     "pricing": "Free",
     "publisher": "banszky",
