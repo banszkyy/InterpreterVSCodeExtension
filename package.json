@@ -38,32 +38,23 @@
             "properties": {
                 "bblang.server.path": {
                     "type": "string",
-                    "description": "Sets the path of the language server binary",
-                    "scope": "machine"
-                },
-                "bblang.runtime.executein": {
-                    "type": "string",
-                    "enum": [
-                        "Terminal",
-                        "External"
-                    ],
-                    "enumDescriptions": [
-                        "Run the files in the built-in VS Code terminal",
-                        "Run the files in an external window"
-                    ],
-                    "default": "Terminal",
-                    "description": "Specifies the terminal to use when executing a script",
-                    "scope": "resource"
+                    "description": "Path of the language server binary",
+                    "scope": "machine-overridable"
                 },
                 "bblang.runtime.path": {
                     "type": "string",
-                    "description": "Sets the path of the runtime binary",
-                    "scope": "machine"
+                    "description": "Path of the runtime binary",
+                    "scope": "machine-overridable"
                 },
                 "bblang.debug.server.path": {
                     "type": "string",
-                    "description": "Sets the path of the debug adapter host binary",
-                    "scope": "machine"
+                    "description": "Path of the debugger host binary",
+                    "scope": "machine-overridable"
+                },
+                "bblang.debug.server.log": {
+                    "type": "string",
+                    "description": "File path to save debugger host logs",
+                    "scope": "machine-overridable"
                 }
             }
         },

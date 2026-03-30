@@ -1,7 +1,6 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as utils from './utils'
-import { UpdateOptions } from './updater'
 
 const dotnetRID = (() => {
     switch (process.platform) {
@@ -41,21 +40,22 @@ export function getConfig() {
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('runtime.path', path.join(__dirname, 'runtime', `bblang${executableFileExtension}`)),
             pathConfigKey: 'runtime.path',
-        } as UpdateOptions,
+        },
         languageServer: {
             githubUsername: 'BBpezsgo',
             githubRepository: 'BBLang-LanguageServer',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('server.path', path.join(__dirname, 'language-server', `bblang_languageserver${executableFileExtension}`)),
             pathConfigKey: 'server.path',
-        } as UpdateOptions,
-        debugServer: {
+        },
+        debuggerHost: {
             githubUsername: 'BBpezsgo',
             githubRepository: 'BBLang-DebugHost',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('debug.server.path', path.join(__dirname, 'debug-server', `bblang_debughost${executableFileExtension}`)),
             pathConfigKey: 'debug.server.path',
-        } as UpdateOptions,
+            logPath: config.get<string>('debug.server.log'),
+        },
     })
 }
 

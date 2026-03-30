@@ -22,7 +22,7 @@ static partial class Program
         string typeExcludedKeywords = string.Join('|', LanguageConstants.KeywordList.Except(TypeKeywords.List));
         string anyIdentifier = @$"[a-zA-Z_@]+[a-zA-Z0-9_@]*";
         string identifier = @$"(?!(?:{keywords})\b){anyIdentifier}";
-        string typeRegex = @$"(?!(?:{typeExcludedKeywords})\b)[a-zA-Z_@]+[a-zA-Z0-9_@\*\[\]\<\>\,\s]*";
+        string typeRegex = @$"(?!(?:{typeExcludedKeywords})\b)([a-zA-Z_@]+[a-zA-Z0-9_@\*\[\]]*)|([a-zA-Z_@]+[a-zA-Z0-9_@\*\[\]]*\<[\w,\s]*\>)";
 
         repository["scope"] = new Pattern()
         {
@@ -34,8 +34,9 @@ static partial class Program
                 new() { Include = "#comment" },
                 new() { Include = "#comment-block" },
 
-                new() { Include = "#attribute" },
                 new() { Include = "#keyword" },
+                new() { Include = "#operator" },
+                new() { Include = "#punctuation" },
 
                 new() { Include = "#any-statement" },
                 new() { Include = "#scope" },
@@ -63,6 +64,35 @@ static partial class Program
             ]
         };
 
+        repository["type"] = new Pattern()
+        {
+            Patterns = [
+                new Pattern() {
+                    Match = @$"\b({string.Join('|', TypeKeywords.List)})\b",
+                    Captures = new()
+                    {
+                        { 1, SyntaxToken.Keyword },
+                    },
+                },
+                new Pattern() {
+                    Match = @$"\b(\w+)\b",
+                    Captures = new()
+                    {
+                        { 1, SyntaxToken.EntityNameType },
+                    },
+                },
+                new Pattern() {
+                    Match = @$"(\<|\>)",
+                    Captures = new()
+                    {
+                        { 1, new() { Name = "punctuation" } },
+                    }
+                },
+                new Pattern() { Include = "#operator" },
+                new Pattern() { Include = "#punctuation" },
+            ],
+        };
+
         repository["literal"] = new Pattern()
         {
             Patterns =
@@ -82,10 +112,12 @@ static partial class Program
                 new() { Include = "#as" },
                 new() { Include = "#flow-control-statement" },
                 new() { Include = "#function-call" },
+                new() { Include = "#local-definition" },
+                new() { Include = "#field-access" },
                 new() { Include = "#literal" },
                 new() { Include = "#hover-popup" },
                 new() { Include = "#keyword" },
-                new() { Include = "#identifier" }
+                new() { Include = "#identifier" },
             ]
         };
 
@@ -202,21 +234,51 @@ static partial class Program
             Patterns = [
                 new()
                 {
-                    Match = @$"(\w+)(?<!{typeExcludedKeywords})\s+({identifier})\s*(?=\()",
+                    Match = @$"(\w+)\s+({identifier})\s*(?=\()",
                     Captures = new()
                     {
+                        { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
                         { 2, SyntaxToken.EntityNameFunction },
                     }
                 },
                 new()
                 {
-                    Match = @$"(\w+)(?<!{typeExcludedKeywords})\s+({identifier})\s*<.*>\s*(?=\()",
+                    Match = @$"(\w+)\s+({identifier})\s*(<.*>)\s*(?=\()",
                     Captures = new()
                     {
+                        { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
                         { 2, SyntaxToken.EntityNameFunction },
+                        { 3, new() { Patterns = [
+                            new()
+                            {
+                                Match = @$"\b(\w+)\b",
+                                Captures = new()
+                                {
+                                    { 1, SyntaxToken.EntityNameType }
+                                }
+                            }
+                        ] } },
                     }
                 },
             ]
+        };
+
+        repository["local-definition"] = new Pattern()
+        {
+            Match = @$"\b({typeRegex})\s+({identifier})\b",
+            Captures = new()
+            {
+                { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
+            }
+        };
+
+        repository["field-access"] = new Pattern()
+        {
+            Match = @$"\.\s*({identifier})\b",
+            Captures = new()
+            {
+                { 1, SyntaxToken.EntityNameVariable },
+            }
         };
 
         repository["strings"] = new Pattern()
@@ -262,6 +324,24 @@ static partial class Program
             ]
         };
 
+        repository["operator"] = new Pattern()
+        {
+            Match = @$"(<|>|<=|>=|==|!=|!|-|\+|\*|\/|&|\+=|-=|\*=|\/=|&=|\^=|\^|\|=|%|<<|>>|&&|\|\||~|\+\+|--|=)",
+            Captures = new()
+            {
+                { 1, SyntaxToken.KeywordOperator },
+            }
+        };
+
+        repository["punctuation"] = new Pattern()
+        {
+            Match = @$"(;|,)",
+            Captures = new()
+            {
+                { 1, new Pattern() { Name = "punctuation" } },
+            }
+        };
+
         string json = JsonSerializer.Serialize(new SyntaxFile()
         {
             Schema = "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
@@ -275,11 +355,13 @@ static partial class Program
                 new() { Include = "#preprocessor" },
                 new() { Include = "#alias-definition" },
                 new() { Include = "#struct-definition" },
-                new() { Include = "#any-statement" },
                 new() { Include = "#function-definition" },
+                new() { Include = "#any-statement" },
                 new() { Include = "#using" },
                 new() { Include = "#scope" },
                 new() { Include = "#keyword" },
+                new() { Include = "#operator" },
+                new() { Include = "#punctuation" },
             ]
         }, Converter.JsonOptions);
 

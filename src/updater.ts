@@ -46,6 +46,13 @@ async function getLatestRelease(options: UpdateOptions, token: vscode.Cancellati
 }
 
 export async function checkForUpdates(options: UpdateOptions, progress: vscode.Progress<{ message?: string | undefined; increment?: number | undefined }> | null = null, token: vscode.CancellationToken | null = null): Promise<FetchUpdateResult> {
+    if (!options.path) {
+        return {
+            status: FetchUpdateStatus.Nonexistent,
+            release: null,
+        }
+    }
+
     log.trace(`[Updater] Checking updates for "${options.path}" ...`)
 
     progress?.report({ message: 'Checking for local files' })
@@ -61,7 +68,7 @@ export async function checkForUpdates(options: UpdateOptions, progress: vscode.P
     const metaFilename = options.path + localUpdateInfoSuffix
 
     if (!fs.existsSync(metaFilename)) {
-        log.trace(`[Updater] File "${metaFilename}" doesn't exists`)
+        log.trace(`[Updater] Meta file "${metaFilename}" doesn't exists`)
         return {
             status: FetchUpdateStatus.Untracked,
             release: null,

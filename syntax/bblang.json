@@ -17,10 +17,10 @@
       "include": "#struct-definition"
     },
     {
-      "include": "#any-statement"
+      "include": "#function-definition"
     },
     {
-      "include": "#function-definition"
+      "include": "#any-statement"
     },
     {
       "include": "#using"
@@ -30,6 +30,12 @@
     },
     {
       "include": "#keyword"
+    },
+    {
+      "include": "#operator"
+    },
+    {
+      "include": "#punctuation"
     }
   ],
   "repository": {
@@ -44,10 +50,13 @@
           "include": "#comment-block"
         },
         {
-          "include": "#attribute"
+          "include": "#keyword"
         },
         {
-          "include": "#keyword"
+          "include": "#operator"
+        },
+        {
+          "include": "#punctuation"
         },
         {
           "include": "#any-statement"
@@ -80,6 +89,40 @@
         }
       ]
     },
+    "type": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword"
+            }
+          },
+          "match": "\\b(void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "entity.name.type"
+            }
+          },
+          "match": "\\b(\\w+)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation"
+            }
+          },
+          "match": "(\\<|\\>)"
+        },
+        {
+          "include": "#operator"
+        },
+        {
+          "include": "#punctuation"
+        }
+      ]
+    },
     "literal": {
       "patterns": [
         {
@@ -106,6 +149,12 @@
         },
         {
           "include": "#function-call"
+        },
+        {
+          "include": "#local-definition"
+        },
+        {
+          "include": "#field-access"
         },
         {
           "include": "#literal"
@@ -217,21 +266,67 @@
       "patterns": [
         {
           "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "include": "#type"
+                }
+              ]
+            },
             "2": {
               "name": "entity.name.function"
             }
           },
-          "match": "(\\w+)(?<!struct|using|alias|temp|ref|this|const|inline|private|export|as|new|delete|sizeof)\\s+((?!(?:struct|using|alias|temp|ref|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b)[a-zA-Z_@]+[a-zA-Z0-9_@]*)\\s*(?=\\()"
+          "match": "(\\w+)\\s+((?!(?:struct|using|alias|temp|ref|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b)[a-zA-Z_@]+[a-zA-Z0-9_@]*)\\s*(?=\\()"
         },
         {
           "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "include": "#type"
+                }
+              ]
+            },
             "2": {
               "name": "entity.name.function"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "captures": {
+                    "1": {
+                      "name": "entity.name.type"
+                    }
+                  },
+                  "match": "\\b(\\w+)\\b"
+                }
+              ]
             }
           },
-          "match": "(\\w+)(?<!struct|using|alias|temp|ref|this|const|inline|private|export|as|new|delete|sizeof)\\s+((?!(?:struct|using|alias|temp|ref|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b)[a-zA-Z_@]+[a-zA-Z0-9_@]*)\\s*<.*>\\s*(?=\\()"
+          "match": "(\\w+)\\s+((?!(?:struct|using|alias|temp|ref|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b)[a-zA-Z_@]+[a-zA-Z0-9_@]*)\\s*(<.*>)\\s*(?=\\()"
         }
       ]
+    },
+    "local-definition": {
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#type"
+            }
+          ]
+        }
+      },
+      "match": "\\b((?!(?:struct|using|alias|temp|ref|this|const|inline|private|export|as|new|delete|sizeof)\\b)([a-zA-Z_@]+[a-zA-Z0-9_@\\*\\[\\]]*)|([a-zA-Z_@]+[a-zA-Z0-9_@\\*\\[\\]]*\\<[\\w,\\s]*\\>))\\s+((?!(?:struct|using|alias|temp|ref|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b)[a-zA-Z_@]+[a-zA-Z0-9_@]*)\\b"
+    },
+    "field-access": {
+      "captures": {
+        "1": {
+          "name": "entity.name.variable"
+        }
+      },
+      "match": "\\.\\s*((?!(?:struct|using|alias|temp|ref|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b)[a-zA-Z_@]+[a-zA-Z0-9_@]*)\\b"
     },
     "strings": {
       "patterns": [
@@ -268,6 +363,22 @@
           "name": "invalid.illegal.unknown-escape.bbc"
         }
       ]
+    },
+    "operator": {
+      "captures": {
+        "1": {
+          "name": "keyword.operator"
+        }
+      },
+      "match": "(<|>|<=|>=|==|!=|!|-|\\+|\\*|\\/|&|\\+=|-=|\\*=|\\/=|&=|\\^=|\\^|\\|=|%|<<|>>|&&|\\|\\||~|\\+\\+|--|=)"
+    },
+    "punctuation": {
+      "captures": {
+        "1": {
+          "name": "punctuation"
+        }
+      },
+      "match": "(;|,)"
     }
   },
   "fileTypes": [

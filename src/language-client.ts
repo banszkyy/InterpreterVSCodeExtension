@@ -10,9 +10,29 @@ import { log } from './extension'
 import * as config from './config'
 import * as fs from 'fs'
 
-export let client: LanguageClientManager | null = null
+let client: LanguageClientManager | null = null
 
 export function activate(context: vscode.ExtensionContext) {
+    startServer(context)
+
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+        if (e.affectsConfiguration(`${utils.extensionConfigName}.server.path`)) {
+            vscode.window.showInformationMessage(`Path to the language server was changed. Do you want to restart the server?`, ...['Yes', 'No'])
+                .then(e => {
+                    if (e === 'Yes') {
+                        stopServer()
+                        startServer(context)
+                    }
+                })
+        }
+    }))
+}
+
+export function deactivate() {
+    stopServer()
+}
+
+function startServer(context: vscode.ExtensionContext) {
     const extConfig = config.getConfig()
 
     if (!fs.existsSync(extConfig.languageServer.path)) {
@@ -25,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
     client.activate()
 }
 
-export function deactivate() {
+function stopServer() {
     client?.deactivate()
     client?.dispose()
     client = null
@@ -62,8 +82,10 @@ export class LanguageClientManager implements Disposable {
                 language: utils.languageExtension,
             }],
             synchronize: {
-                configurationSection: `${utils.extensionConfigName}.server`,
-                fileEvents: vscode.workspace.createFileSystemWatcher('**/.bbc'),
+                fileEvents: [
+                    vscode.workspace.createFileSystemWatcher('**/.bbc'),
+                    vscode.workspace.createFileSystemWatcher('**/.bbnb')
+                ],
             },
             diagnosticPullOptions: {
                 onChange: true,

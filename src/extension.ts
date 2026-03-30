@@ -13,8 +13,6 @@ const checkForUpdates = true
 export function activate(context: vscode.ExtensionContext) {
     log = vscode.window.createOutputChannel("BBLang Extension", { log: true })
 
-    const extConfig = config.getConfig()
-
     const isVirtual = isVirtualWorkspace()
 
     if (!isVirtual) {
@@ -91,6 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
                 })
             }
 
+            const extConfig = config.getConfig()
             const tasks = []
 
             tasks.push(interactiveUpdate(extConfig.languageServer, {
@@ -101,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
             }, languageClient.deactivate, languageClient.activate)
                 .catch(reason => vscode.window.showWarningMessage(reason)))
 
-            tasks.push(interactiveUpdate(extConfig.debugServer, {
+            tasks.push(interactiveUpdate(extConfig.debuggerHost, {
                 NOT_FOUND: 'Debug host does not exists',
                 UPDATE_AVALIABLE: 'Update avaliable for the debug host',
                 PROGRESS: 'Downloading the debug host',
