@@ -101,7 +101,6 @@ export class LanguageClientManager implements Disposable {
             serverOptions,
             clientOptions
         )
-        this.client.registerProposedFeatures()
 
         interface CompilerStatusNotificationArgs {
             status: 'done' | 'failed' | 'working'
@@ -224,20 +223,28 @@ export class LanguageClientManager implements Disposable {
         this.context = context
     }
 
-    public activate() {
+    public activate(): Promise<void> {
         log.debug(`[Language] Starting language server ...`)
-        this.client.start().then(() => {
-            this.context.subscriptions.push(this.client)
-            log.debug(`[Language] Language server started`)
-        }).catch(error => {
-            log.error(`[Language] Failed to start language server`, error)
-            vscode.window.showErrorMessage(error)
-        })
+        return this.client.start()
+            .then(() => {
+                this.context.subscriptions.push(this.client)
+                log.debug(`[Language] Language server started`)
+            })
+            .catch(error => {
+                log.error(`[Language] Failed to start language server`, error)
+                vscode.window.showErrorMessage(error)
+            })
     }
 
-    public deactivate() {
-        this.client?.stop()
-        log.debug(`[Language] Language server stopped`)
+    public deactivate(): Promise<void> {
+        return this.client?.stop()
+            .then(() => {
+                log.debug(`[Language] Language server stopped`)
+            })
+            .catch(error => {
+                log.error(`[Language] Failed to stop language server`, error)
+                vscode.window.showErrorMessage(error)
+            })
     }
 
     [Symbol.dispose]() { this.dispose() }
