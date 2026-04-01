@@ -11,6 +11,9 @@
       "include": "#preprocessor"
     },
     {
+      "include": "#using"
+    },
+    {
       "include": "#alias-definition"
     },
     {
@@ -21,9 +24,6 @@
     },
     {
       "include": "#any-statement"
-    },
-    {
-      "include": "#using"
     },
     {
       "include": "#scope"
