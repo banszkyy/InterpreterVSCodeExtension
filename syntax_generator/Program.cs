@@ -234,7 +234,7 @@ static partial class Program
             Patterns = [
                 new()
                 {
-                    Match = @$"(\w+)\s+({identifier})\s*(?=\()",
+                    Match = @$"({typeRegex})\s+({identifier})\s*(?=\()",
                     Captures = new()
                     {
                         { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
@@ -243,7 +243,7 @@ static partial class Program
                 },
                 new()
                 {
-                    Match = @$"(\w+)\s+({identifier})\s*(<.*>)\s*(?=\()",
+                    Match = @$"({typeRegex})\s+({identifier})\s*(<.*>)\s*(?=\()",
                     Captures = new()
                     {
                         { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
