@@ -1,0 +1,108 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "patterns": [
+    {
+      "include": "#label"
+    },
+    {
+      "include": "#instruction"
+    }
+  ],
+  "repository": {
+    "label": {
+      "captures": {
+        "1": {
+          "name": "entity.name.function"
+        },
+        "2": {
+          "name": "punctuation"
+        }
+      },
+      "match": "([a-zA-Z][a-zA-Z0-9]*)(:)"
+    },
+    "instruction": {
+      "captures": {
+        "1": {
+          "name": "comment"
+        },
+        "2": {
+          "name": "entity.name.function"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#operand"
+            }
+          ]
+        }
+      },
+      "match": "([0-9]+:)[ \\t]+([a-zA-Z0-9]+)[ \\t]*([a-zA-Z0-9\\[\\] \\<\\>\\+\\-]*)"
+    },
+    "operand": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation"
+            },
+            "2": {
+              "name": "entity.name.function"
+            },
+            "3": {
+              "name": "punctuation"
+            }
+          },
+          "match": "(\\<{1,2})([a-zA-Z0-9]+)(\\>{1,2})"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "entity.name.type"
+            }
+          },
+          "match": "\\b(BYTE|WORD|DWORD|QWORD)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword"
+            }
+          },
+          "match": "\\b(RCP|RSP|RBP|RAX|EAX|AX|AH|AL|RBX|EBX|BX|BH|BL|ECX|RCX|CX|CH|CL|RDX|EDX|DX|DH|DL|BP|SP)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "constant.numeric"
+            }
+          },
+          "match": "\\b([0-9]+)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation"
+            },
+            "2": {
+              "name": "variable.name"
+            }
+          },
+          "match": "(#)([a-zA-Z0-9_]+)\\b"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation"
+            }
+          },
+          "match": "(\\[|\\]|\\+|\\-)"
+        }
+      ]
+    }
+  },
+  "fileTypes": [
+    "bbil"
+  ],
+  "name": "BBLang IL",
+  "scopeName": "source.bbil"
+}

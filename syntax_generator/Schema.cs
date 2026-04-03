@@ -4,13 +4,14 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace LanguageCore.SyntaxGenerator;
 
-public class SyntaxFile
+class SyntaxFile
 {
     [JsonPropertyName("$schema")]
-    public required string Schema { get; set; }
+    public string? Schema { get; set; }
 
     [JsonPropertyName("patterns")]
     public Pattern[]? Patterns { get; set; }
@@ -47,7 +48,7 @@ public class SyntaxFile
     public string? Uuid { get; set; }
 }
 
-public class Pattern
+class Pattern
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("applyEndPatternLast")]
@@ -60,11 +61,11 @@ public class Pattern
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("beginCaptures")]
-    public Dictionary<int, Pattern>? BeginCaptures { get; set; }
+    public Dictionary<int, Match>? BeginCaptures { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("captures")]
-    public Dictionary<int, Pattern>? Captures { get; set; }
+    public Dictionary<int, Match>? Captures { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("comment")]
@@ -85,7 +86,7 @@ public class Pattern
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("endCaptures")]
-    public Dictionary<int, Pattern>? EndCaptures { get; set; }
+    public Dictionary<int, Match>? EndCaptures { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("include")]
@@ -110,10 +111,27 @@ public class Pattern
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonPropertyName("whileCaptures")]
-    public Dictionary<int, Pattern>? WhileCaptures { get; set; }
+    public Dictionary<int, Match>? WhileCaptures { get; set; }
 }
 
-public static class Converter
+class Match
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonPropertyName("patterns")]
+    public Pattern[]? Patterns { get; set; }
+
+    public Match() { }
+
+    public Match(string? name) => Name = name;
+
+    public static Match Includes(params string[] includes) => new() { Patterns = [.. includes.Select(v => new Pattern() { Include = v })] };
+}
+
+static class Converter
 {
     public static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerOptions.Default)
     {
@@ -128,7 +146,7 @@ public static class Converter
     };
 }
 
-public class DateOnlyConverter : JsonConverter<DateOnly>
+class DateOnlyConverter : JsonConverter<DateOnly>
 {
     readonly string serializationFormat;
     public DateOnlyConverter() : this(null) { }
@@ -148,7 +166,7 @@ public class DateOnlyConverter : JsonConverter<DateOnly>
             => writer.WriteStringValue(value.ToString(serializationFormat));
 }
 
-public class TimeOnlyConverter : JsonConverter<TimeOnly>
+class TimeOnlyConverter : JsonConverter<TimeOnly>
 {
     readonly string serializationFormat;
 
@@ -169,7 +187,7 @@ public class TimeOnlyConverter : JsonConverter<TimeOnly>
             => writer.WriteStringValue(value.ToString(serializationFormat));
 }
 
-public class IsoDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+class IsoDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 {
     public override bool CanConvert(Type t) => t == typeof(DateTimeOffset);
 

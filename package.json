@@ -82,6 +82,17 @@
                 }
             },
             {
+                "id": "bblang-il",
+                "aliases": [
+                    "bbil"
+                ],
+                "extensions": [ ".bbil" ],
+                "icon": {
+                    "dark": "./icons/files/bbc-il.svg",
+                    "light": "./icons/files/bbc-il.svg"
+                }
+            },
+            {
                 "id": "bblang-notebook",
                 "aliases": [],
                 "extensions": [ ".bbnb" ],
@@ -98,6 +109,11 @@
                     "dark": "./icons/files/bbc-config.svg",
                     "light": "./icons/files/bbc-config.svg"
                 }
+            },
+            {
+                "id": "msil",
+                "aliases": [],
+                "extensions": [ ".il" ]
             }
         ],
         "grammars": [
@@ -110,6 +126,16 @@
                 "language": "bblang-test-result",
                 "scopeName": "source.result",
                 "path": "./syntax/bblang-test-result.json"
+            },
+            {
+                "language": "bblang-il",
+                "scopeName": "source.bbil",
+                "path": "./syntax/bblang-il.json"
+            },
+            {
+                "language": "msil",
+                "scopeName": "source.il",
+                "path": "./syntax/msil.json"
             }
         ],
         "snippets": [

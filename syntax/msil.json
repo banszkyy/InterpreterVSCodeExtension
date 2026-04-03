@@ -1,0 +1,513 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#comment-block"
+    },
+    {
+      "include": "#function-definition"
+    },
+    {
+      "include": "#type-definition"
+    },
+    {
+      "include": "#scope"
+    },
+    {
+      "include": "#custom-attribute"
+    },
+    {
+      "include": "#punctuation"
+    }
+  ],
+  "repository": {
+    "attributes": {
+      "captures": {
+        "1": {
+          "name": "keyword"
+        }
+      },
+      "match": "(PrivateScope|ReuseSlot|Private|FamANDAssem|Assembly|Family|FamORAssem|Public|MemberAccessMask|UnmanagedExport|Static|Final|Virtual|HideBySig|NewSlot|VtableLayoutMask|CheckAccessOnOverride|Abstract|SpecialName|RTSpecialName|PinvokeImpl|HasSecurity|RequireSecObject|ReservedMask|NotPublic|AutoLayout|AnsiClass|Class|NestedPublic|NestedPrivate|NestedFamily|NestedAssembly|NestedFamANDAssem|VisibilityMask|NestedFamORAssem|SequentialLayout|ExplicitLayout|LayoutMask|ExtendedLayout|Interface|ClassSemanticsMask|Sealed|Import|Serializable|WindowsRuntime|UnicodeClass|AutoClass|StringFormatMask|CustomFormatClass|BeforeFieldInit|CustomFormatMask|FieldAccessMask|InitOnly|Literal|NotSerialized|HasFieldRVA|HasFieldMarshal|HasDefault)"
+    },
+    "type": {
+      "captures": {
+        "1": {
+          "name": "punctuation"
+        },
+        "2": {
+          "name": "entity.name.type"
+        },
+        "3": {
+          "name": "punctuation"
+        }
+      },
+      "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.]*\\.)?([a-zA-Z_@][a-zA-Z0-9_@]*)(\\[\\])?"
+    },
+    "scope": {
+      "begin": "{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation"
+        }
+      },
+      "end": "}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#instruction"
+        },
+        {
+          "include": "#function-definition"
+        },
+        {
+          "include": "#constructor-definition"
+        },
+        {
+          "include": "#field-definition"
+        },
+        {
+          "include": "#custom-attribute"
+        },
+        {
+          "include": "#punctuation"
+        }
+      ]
+    },
+    "field-definition": {
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#attributes"
+            }
+          ]
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#type"
+            }
+          ]
+        },
+        "4": {
+          "name": "variable.other"
+        }
+      },
+      "match": "^[ \\t]*((PrivateScope\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|FieldAccessMask\\s+|Static\\s+|InitOnly\\s+|Literal\\s+|NotSerialized\\s+|HasFieldRVA\\s+|SpecialName\\s+|RTSpecialName\\s+|HasFieldMarshal\\s+|PinvokeImpl\\s+|HasDefault\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+    },
+    "constructor-definition": {
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#attributes"
+            }
+          ]
+        },
+        "3": {
+          "name": "keyword"
+        },
+        "4": {
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "patterns": [
+                    {
+                      "include": "#type"
+                    }
+                  ]
+                },
+                "2": {
+                  "name": "variable.parameter"
+                }
+              },
+              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+            }
+          ]
+        }
+      },
+      "match": "^[ \\t]*((PrivateScope\\s+|ReuseSlot\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|MemberAccessMask\\s+|UnmanagedExport\\s+|Static\\s+|Final\\s+|Virtual\\s+|HideBySig\\s+|NewSlot\\s+|VtableLayoutMask\\s+|CheckAccessOnOverride\\s+|Abstract\\s+|SpecialName\\s+|RTSpecialName\\s+|PinvokeImpl\\s+|HasSecurity\\s+|RequireSecObject\\s+|ReservedMask\\s+)*)(\\.ctor)\\((.*)\\)"
+    },
+    "function-definition": {
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#attributes"
+            }
+          ]
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#type"
+            }
+          ]
+        },
+        "4": {
+          "name": "entity.name.function"
+        },
+        "5": {
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "patterns": [
+                    {
+                      "include": "#type"
+                    }
+                  ]
+                },
+                "2": {
+                  "name": "variable.parameter"
+                }
+              },
+              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+            }
+          ]
+        }
+      },
+      "match": "^[ \\t]*((PrivateScope\\s+|ReuseSlot\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|MemberAccessMask\\s+|UnmanagedExport\\s+|Static\\s+|Final\\s+|Virtual\\s+|HideBySig\\s+|NewSlot\\s+|VtableLayoutMask\\s+|CheckAccessOnOverride\\s+|Abstract\\s+|SpecialName\\s+|RTSpecialName\\s+|PinvokeImpl\\s+|HasSecurity\\s+|RequireSecObject\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)"
+    },
+    "type-definition": {
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#attributes"
+            }
+          ]
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#type"
+            }
+          ]
+        }
+      },
+      "match": "^[ \\t]*((NotPublic\\s+|AutoLayout\\s+|AnsiClass\\s+|Class\\s+|Public\\s+|NestedPublic\\s+|NestedPrivate\\s+|NestedFamily\\s+|NestedAssembly\\s+|NestedFamANDAssem\\s+|VisibilityMask\\s+|NestedFamORAssem\\s+|SequentialLayout\\s+|ExplicitLayout\\s+|LayoutMask\\s+|ExtendedLayout\\s+|Interface\\s+|ClassSemanticsMask\\s+|Abstract\\s+|Sealed\\s+|SpecialName\\s+|RTSpecialName\\s+|Import\\s+|Serializable\\s+|WindowsRuntime\\s+|UnicodeClass\\s+|AutoClass\\s+|StringFormatMask\\s+|CustomFormatClass\\s+|HasSecurity\\s+|ReservedMask\\s+|BeforeFieldInit\\s+|CustomFormatMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@]*)\\n"
+    },
+    "custom-attribute": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation"
+            },
+            "2": {
+              "name": "entity.name.type"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "include": "#literal"
+                }
+              ]
+            }
+          },
+          "match": "\\[([a-zA-Z0-9\\.]+\\.)?([a-zA-Z0-9]+)\\((.*)\\)\\]",
+          "patterns": [
+            {
+              "include": "#punctuation"
+            }
+          ]
+        }
+      ]
+    },
+    "instruction": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "variable.parameter"
+            }
+          },
+          "match": "\\b(starg|starg.s|ldarg|ldarga|ldarga.s)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "match": "\\b(nop|break|ldarg.0|ldarg.1|ldarg.2|ldarg.3|ldloc.0|ldloc.1|ldloc.2|ldloc.3|stloc.0|stloc.1|stloc.2|stloc.3|ldnull|ldc.i4.m1|ldc.i4.0|ldc.i4.1|ldc.i4.2|ldc.i4.3|ldc.i4.4|ldc.i4.5|ldc.i4.6|ldc.i4.7|ldc.i4.8|dup|pop|ret|ldind.i1|ldind.u1|ldind.i2|ldind.u2|ldind.i4|ldind.u4|ldind.i8|ldind.i|ldind.r4|ldind.r8|ldind.ref|stind.ref|stind.i1|stind.i2|stind.i4|stind.i8|stind.r4|stind.r8|add|sub|mul|div|div.un|rem|rem.un|and|or|xor|shl|shr|shr.un|neg|not|conv.i1|conv.i2|conv.i4|conv.i8|conv.r4|conv.r8|conv.u4|conv.u8|conv.r.un|throw|conv.ovf.i1.un|conv.ovf.i2.un|conv.ovf.i4.un|conv.ovf.i8.un|conv.ovf.u1.un|conv.ovf.u2.un|conv.ovf.u4.un|conv.ovf.u8.un|conv.ovf.i.un|conv.ovf.u.un|ldlen|ldelem.i1|ldelem.u1|ldelem.i2|ldelem.u2|ldelem.i4|ldelem.u4|ldelem.i8|ldelem.i|ldelem.r4|ldelem.r8|ldelem.ref|stelem.i|stelem.i1|stelem.i2|stelem.i4|stelem.i8|stelem.r4|stelem.r8|stelem.ref|conv.ovf.i1|conv.ovf.u1|conv.ovf.i2|conv.ovf.u2|conv.ovf.i4|conv.ovf.u4|conv.ovf.i8|conv.ovf.u8|ckfinite|conv.u2|conv.u1|conv.i|conv.ovf.i|conv.ovf.u|add.ovf|add.ovf.un|mul.ovf|mul.ovf.un|sub.ovf|sub.ovf.un|endfinally|stind.i|conv.u|prefix7|prefix6|prefix5|prefix4|prefix3|prefix2|prefix1|prefixref|arglist|ceq|cgt|cgt.un|clt|clt.un|localloc|endfilter|volatile.|tail.|cpblk|initblk|rethrow|refanytype|readonly.)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "include": "#number"
+                }
+              ]
+            }
+          },
+          "match": "\\b(ldc.i4.s|ldc.i4|ldc.i8|ldc.r4|ldc.r8|ldstr|unaligned.)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "variable.other"
+            }
+          },
+          "match": "\\b(br.s|brfalse.s|brtrue.s|beq.s|bge.s|bgt.s|ble.s|blt.s|bne.un.s|bge.un.s|bgt.un.s|ble.un.s|blt.un.s|br|brfalse|brtrue|beq|bge|bgt|ble|blt|bne.un|bge.un|bgt.un|ble.un|blt.un|leave|leave.s)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "captures": {
+                    "1": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "2": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "3": {
+                      "name": "punctuation"
+                    },
+                    "4": {
+                      "name": "variable.other"
+                    }
+                  },
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*)(\\.)([a-zA-Z_@][a-zA-Z0-9_@]*)"
+                }
+              ]
+            }
+          },
+          "match": "\\b(ldfld|ldflda|stfld|ldsfld|ldsflda|stsfld)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "captures": {
+                    "1": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "2": {
+                      "name": "entity.name.function"
+                    },
+                    "3": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "5": {
+                      "name": "punctuation"
+                    },
+                    "6": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    }
+                  },
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)((\\/)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*))?"
+                }
+              ]
+            }
+          },
+          "match": "\\b(jmp|call|callvirt|newobj|ldftn|ldvirtftn)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "match": "\\b(calli)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "include": "#string"
+                }
+              ]
+            }
+          },
+          "match": "\\b(ldstr)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "match": "\\b(switch)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            }
+          },
+          "match": "\\b(ldtoken)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "include": "#type"
+                }
+              ]
+            }
+          },
+          "match": "\\b(cpobj|ldobj|castclass|isinst|unbox|stobj|box|newarr|ldelema|ldelem|stelem|unbox.any|refanyval|mkrefany|initobj|constrained.|sizeof)\\s+(.+)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "entity.name.variable"
+            }
+          },
+          "match": "\\b(ldarg.s|ldarga.s|starg.s|ldloc.s|ldloca.s|stloc.s|ldarg|ldarga|starg|ldloc|ldloca|stloc)\\s+(.+)"
+        }
+      ]
+    },
+    "literal": {
+      "patterns": [
+        {
+          "include": "#string"
+        },
+        {
+          "include": "#number"
+        }
+      ]
+    },
+    "comment": {
+      "match": "\\/\\/[^\\n]*\\n",
+      "name": "comment.line"
+    },
+    "comment-block": {
+      "patterns": [
+        {
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.msil"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.msil"
+            }
+          },
+          "name": "comment.block"
+        },
+        {
+          "match": "\\*/.*\\n",
+          "name": "invalid.illegal.stray-comment-end.msil"
+        }
+      ]
+    },
+    "number": {
+      "match": "\\.[0-9]+f?\\b|\\b[0-9]+f?\\b|\\b0x[0-9a-fA-F_]+\\b|\\b0b[01_]+\\b|\\b[0-9]e[0-9]f?\\b",
+      "name": "constant.numeric"
+    },
+    "string": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double",
+          "patterns": [
+            {
+              "include": "#string-escaped-char"
+            }
+          ]
+        },
+        {
+          "begin": "'",
+          "end": "'",
+          "name": "string.quoted.single",
+          "patterns": [
+            {
+              "include": "#string-escaped-char"
+            }
+          ]
+        }
+      ]
+    },
+    "string-escaped-char": {
+      "patterns": [
+        {
+          "match": "(?x)\\\\(\\\\|[ntr\\\"e]|0|(u[0-9a-fA-F]{4}))",
+          "name": "constant.character.escape"
+        },
+        {
+          "match": "\\\\(u[0-9a-zA-Z]{4}|.)",
+          "name": "invalid.illegal.unknown-escape.msil"
+        }
+      ]
+    },
+    "punctuation": {
+      "captures": {
+        "1": {
+          "name": "punctuation"
+        }
+      },
+      "match": "(;|,)"
+    }
+  },
+  "fileTypes": [
+    "il",
+    "msil"
+  ],
+  "name": "MSIL",
+  "scopeName": "source.il"
+}

@@ -1,40 +1,49 @@
 {
-	"scopeName": "source.result",
-	"fileTypes": [
-		"bblang-test-result"
-	],
-	"name": "BBLang Test Result Language",
-	"patterns": [
-		{ "include": "#escaped" },
-		{ "include": "#hash" }
-	],
-	"repository": {
-		"escaped": {
-			"match": "(\\.)",
-			"name": "constant.character.escape"
-		},
-		"hash": {
-			"patterns": [
-				{
-					"match": "(#exitcode)\\s+(-?\\d+)\n",
-					"captures": {
-						"1": {
-							"name": "keyword"
-						},
-						"2": {
-							"name": "constant.numeric"
-						}
-					}
-				},
-				{
-					"match": "(#.*)\n",
-					"captures": {
-						"1": {
-							"name": "invalid"
-						}
-					}
-				}
-			]
-		}
-	}
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "patterns": [
+    {
+      "include": "#escaped"
+    },
+    {
+      "include": "#hash"
+    }
+  ],
+  "repository": {
+    "escaped": {
+      "captures": {
+        "1": {
+          "name": "constant.character.escape"
+        }
+      },
+      "match": "(\\.)"
+    },
+    "hash": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "keyword"
+            },
+            "2": {
+              "name": "constant.numeric"
+            }
+          },
+          "match": "(#exitcode)\\s+(-?\\d+)\n"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "invalid"
+            }
+          },
+          "match": "(#.*)\n"
+        }
+      ]
+    }
+  },
+  "fileTypes": [
+    "bblang-test-result"
+  ],
+  "name": "BBLang Test Result Language",
+  "scopeName": "source.result"
 }
