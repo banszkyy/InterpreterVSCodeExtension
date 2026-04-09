@@ -77,7 +77,7 @@ static class BBLang
                     Match = @$"(\<|\>)",
                     Captures = new()
                     {
-                        { 1, new() { Name = "punctuation" } },
+                        { 1, SyntaxToken.Punctuation },
                     }
                 },
                 new Pattern() { Include = "#operator" },
@@ -107,7 +107,6 @@ static class BBLang
                 new() { Include = "#local-definition" },
                 new() { Include = "#field-access" },
                 new() { Include = "#literal" },
-                new() { Include = "#hover-popup" },
                 new() { Include = "#keyword" },
                 new() { Include = "#identifier" },
             ]
@@ -115,8 +114,8 @@ static class BBLang
 
         repository["hover-popup"] = new Pattern()
         {
-            Match = @"^\(\w+\)",
-            Name = "emphasis"
+            Match = @"^\([a-z]+\)",
+            Name = "punctuation"
         };
 
         repository["flow-control-statement"] = new Pattern()
@@ -191,6 +190,18 @@ static class BBLang
                 { 1, SyntaxToken.KeywordControl },
                 { 2, SyntaxToken.EntityNameType },
             }
+        };
+
+        repository["enum-definition"] = new Pattern()
+        {
+            Match = @$"({DeclarationKeywords.Enum})\s+({identifier})(\s*(:)\s*({typeRegex}))?",
+            Captures = new()
+            {
+                { 1, SyntaxToken.KeywordControl },
+                { 2, SyntaxToken.EntityNameType },
+                { 4, SyntaxToken.Punctuation },
+                { 5, Match.Includes("#type") },
+            },
         };
 
         repository["using"] = new Pattern()
@@ -327,10 +338,10 @@ static class BBLang
 
         repository["punctuation"] = new Pattern()
         {
-            Match = @$"(;|,)",
+            Match = @$"(;|:|,)",
             Captures = new()
             {
-                { 1, new() { Name = "punctuation" } },
+                { 1, SyntaxToken.Punctuation },
             }
         };
 
@@ -342,11 +353,13 @@ static class BBLang
             ScopeName = "source.bbc",
             Repository = repository,
             Patterns = [
+                new() { Include = "#hover-popup" },
                 new() { Include = "#comment" },
                 new() { Include = "#comment-block" },
                 new() { Include = "#preprocessor" },
                 new() { Include = "#using" },
                 new() { Include = "#alias-definition" },
+                new() { Include = "#enum-definition" },
                 new() { Include = "#struct-definition" },
                 new() { Include = "#function-definition" },
                 new() { Include = "#any-statement" },
