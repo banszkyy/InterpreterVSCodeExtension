@@ -108,7 +108,7 @@ export class LanguageClientManager implements Disposable {
         }
 
         interface ProjectStatusNotificationArgs {
-            isProject: boolean
+            projectType: null | 'project' | 'file'
             contextFile: string
             indexedFiles?: number
             root?: string
@@ -166,13 +166,18 @@ export class LanguageClientManager implements Disposable {
                 }
                 projectStatusBarItem.show()
 
-                if (project.isProject) {
-                    projectStatusBarItem.text = `Yes Project`
+                if (project.projectType === 'project') {
+                    projectStatusBarItem.text = `$(project) Project`
+                    projectStatusBarItem.tooltip = `${project.indexedFiles} files indexed\n${project.root}`
+                    projectStatusBarItem.backgroundColor = undefined
+                    projectStatusBarItem.color = undefined
+                } else if (project.projectType === 'file') {
+                    projectStatusBarItem.text = `$(file) File`
                     projectStatusBarItem.tooltip = `${project.indexedFiles} files indexed\n${project.root}`
                     projectStatusBarItem.backgroundColor = undefined
                     projectStatusBarItem.color = undefined
                 } else {
-                    projectStatusBarItem.text = `No Project`
+                    projectStatusBarItem.text = `$(warning) No Project`
                     projectStatusBarItem.tooltip = undefined
                     projectStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground')
                     projectStatusBarItem.color = new vscode.ThemeColor('statusBarItem.warningForeground')
