@@ -47,6 +47,14 @@ static class BBLang
                     },
                 },
                 new Pattern(){
+                    Match = @$"(#else)",
+                    Captures = new()
+                    {
+                        { 1, SyntaxToken.Comment },
+                        { 2, SyntaxToken.Comment },
+                    },
+                },
+                new Pattern(){
                     Match = @"(#endif)",
                     Captures = new()
                     {
@@ -177,7 +185,7 @@ static class BBLang
             Match = @$"({DeclarationKeywords.Struct})[\s]+({identifier})",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordControl },
+                { 1, SyntaxToken.Keyword },
                 { 2, SyntaxToken.EntityNameType },
             }
         };
@@ -187,7 +195,7 @@ static class BBLang
             Match = @$"({DeclarationKeywords.Alias})\s+({identifier})\s+",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordControl },
+                { 1, SyntaxToken.Keyword },
                 { 2, SyntaxToken.EntityNameType },
             }
         };
@@ -197,7 +205,7 @@ static class BBLang
             Match = @$"({DeclarationKeywords.Enum})\s+({identifier})(\s*(:)\s*({typeRegex}))?",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordControl },
+                { 1, SyntaxToken.Keyword },
                 { 2, SyntaxToken.EntityNameType },
                 { 4, SyntaxToken.Punctuation },
                 { 5, Match.Includes("#type") },
@@ -219,7 +227,7 @@ static class BBLang
             Match = @$"\b({keywords})\b",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordControl },
+                { 1, SyntaxToken.Keyword },
             }
         };
 

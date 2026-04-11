@@ -573,7 +573,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', [OpCodes.Starg, OpCodes.Starg_S, OpCodes.Ldarg, OpCodes.Ldarga, OpCodes.Ldarga_S])})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, SyntaxToken.VariableParameter },
                     },
                 },
@@ -582,7 +582,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineNone).Select(v => v.Name))})",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                     },
                 },
                 new()
@@ -590,7 +590,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineI or OperandType.InlineI8 or OperandType.InlineR or OperandType.InlineString or OperandType.ShortInlineI or OperandType.ShortInlineR).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, Match.Includes("#number") },
                     },
                 },
@@ -599,7 +599,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineBrTarget or OperandType.ShortInlineBrTarget).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, SyntaxToken.VariableOther },
                     },
                 },
@@ -608,7 +608,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineField).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, new() { Patterns = [
                             new()
                             {
@@ -629,7 +629,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineMethod).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, new() { Patterns = [
                             new()
                             {
@@ -651,7 +651,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineSig).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                     },
                 },
                 new()
@@ -659,7 +659,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineString).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, Match.Includes("#string") },
                     },
                 },
@@ -668,7 +668,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineSwitch).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                     },
                 },
                 new()
@@ -676,7 +676,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineTok).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                     },
                 },
                 new()
@@ -684,7 +684,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineType).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, Match.Includes("#type") },
                     },
                 },
@@ -693,7 +693,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineVar or OperandType.ShortInlineVar).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.KeywordControl },
+                        { 1, SyntaxToken.Keyword },
                         { 2, SyntaxToken.EntityNameVariable },
                     },
                 },

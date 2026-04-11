@@ -89,6 +89,17 @@
           "captures": {
             "1": {
               "name": "comment"
+            },
+            "2": {
+              "name": "comment"
+            }
+          },
+          "match": "(#else)"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "comment"
             }
           },
           "match": "(#endif)"
@@ -219,7 +230,7 @@
     "struct-definition": {
       "captures": {
         "1": {
-          "name": "keyword.control"
+          "name": "keyword"
         },
         "2": {
           "name": "entity.name.type"
@@ -230,7 +241,7 @@
     "alias-definition": {
       "captures": {
         "1": {
-          "name": "keyword.control"
+          "name": "keyword"
         },
         "2": {
           "name": "entity.name.type"
@@ -241,7 +252,7 @@
     "enum-definition": {
       "captures": {
         "1": {
-          "name": "keyword.control"
+          "name": "keyword"
         },
         "2": {
           "name": "entity.name.type"
@@ -273,7 +284,7 @@
     "keyword": {
       "captures": {
         "1": {
-          "name": "keyword.control"
+          "name": "keyword"
         }
       },
       "match": "\\b(struct|using|alias|enum|temp|this|const|inline|void|any|u8|i8|u16|i16|u32|i32|u64|i64|f32|private|export|as|new|delete|sizeof)\\b"
