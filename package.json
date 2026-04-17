@@ -273,6 +273,14 @@
                     }
                 ]
             }
+        ],
+        "semanticTokenScopes": [
+            {
+                "language": "bbc",
+                "scopes": {
+                    "keyword.meow": ["keyword"]
+                }
+            }
         ]
     },
     "scripts": {
