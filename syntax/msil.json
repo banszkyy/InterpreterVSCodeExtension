@@ -33,18 +33,23 @@
       "match": "(PrivateScope|ReuseSlot|Private|FamANDAssem|Assembly|Family|FamORAssem|Public|MemberAccessMask|UnmanagedExport|Static|Final|Virtual|HideBySig|NewSlot|VtableLayoutMask|CheckAccessOnOverride|Abstract|SpecialName|RTSpecialName|PinvokeImpl|HasSecurity|RequireSecObject|ReservedMask|NotPublic|AutoLayout|AnsiClass|Class|NestedPublic|NestedPrivate|NestedFamily|NestedAssembly|NestedFamANDAssem|VisibilityMask|NestedFamORAssem|SequentialLayout|ExplicitLayout|LayoutMask|ExtendedLayout|Interface|ClassSemanticsMask|Sealed|Import|Serializable|WindowsRuntime|UnicodeClass|AutoClass|StringFormatMask|CustomFormatClass|BeforeFieldInit|CustomFormatMask|FieldAccessMask|InitOnly|Literal|NotSerialized|HasFieldRVA|HasFieldMarshal|HasDefault)"
     },
     "type": {
-      "captures": {
-        "1": {
-          "name": "punctuation"
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation"
+            },
+            "2": {
+              "name": "entity.name.type"
+            }
+          },
+          "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.]*\\.)?([a-zA-Z_@][a-zA-Z0-9_@]*)"
         },
-        "2": {
-          "name": "entity.name.type"
-        },
-        "3": {
+        {
+          "match": "\\[|\\]|\\*|\\&|\\+",
           "name": "punctuation"
         }
-      },
-      "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.]*\\.)?([a-zA-Z_@][a-zA-Z0-9_@]*)(\\[\\])?"
+      ]
     },
     "scope": {
       "begin": "{",
@@ -60,6 +65,12 @@
         }
       },
       "patterns": [
+        {
+          "include": "#maxstack"
+        },
+        {
+          "include": "#locals"
+        },
         {
           "include": "#instruction"
         },
@@ -100,7 +111,7 @@
           "name": "variable.other"
         }
       },
-      "match": "^[ \\t]*((PrivateScope\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|FieldAccessMask\\s+|Static\\s+|InitOnly\\s+|Literal\\s+|NotSerialized\\s+|HasFieldRVA\\s+|SpecialName\\s+|RTSpecialName\\s+|HasFieldMarshal\\s+|PinvokeImpl\\s+|HasDefault\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+      "match": "^[ \\t]*((PrivateScope\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|FieldAccessMask\\s+|Static\\s+|InitOnly\\s+|Literal\\s+|NotSerialized\\s+|HasFieldRVA\\s+|SpecialName\\s+|RTSpecialName\\s+|HasFieldMarshal\\s+|PinvokeImpl\\s+|HasDefault\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
     },
     "constructor-definition": {
       "captures": {
@@ -129,7 +140,7 @@
                   "name": "variable.parameter"
                 }
               },
-              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
             }
           ]
         }
@@ -170,12 +181,12 @@
                   "name": "variable.parameter"
                 }
               },
-              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
             }
           ]
         }
       },
-      "match": "^[ \\t]*((PrivateScope\\s+|ReuseSlot\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|MemberAccessMask\\s+|UnmanagedExport\\s+|Static\\s+|Final\\s+|Virtual\\s+|HideBySig\\s+|NewSlot\\s+|VtableLayoutMask\\s+|CheckAccessOnOverride\\s+|Abstract\\s+|SpecialName\\s+|RTSpecialName\\s+|PinvokeImpl\\s+|HasSecurity\\s+|RequireSecObject\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)"
+      "match": "^[ \\t]*((PrivateScope\\s+|ReuseSlot\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|MemberAccessMask\\s+|UnmanagedExport\\s+|Static\\s+|Final\\s+|Virtual\\s+|HideBySig\\s+|NewSlot\\s+|VtableLayoutMask\\s+|CheckAccessOnOverride\\s+|Abstract\\s+|SpecialName\\s+|RTSpecialName\\s+|PinvokeImpl\\s+|HasSecurity\\s+|RequireSecObject\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)"
     },
     "type-definition": {
       "captures": {
@@ -192,9 +203,16 @@
               "include": "#type"
             }
           ]
+        },
+        "5": {
+          "patterns": [
+            {
+              "include": "#type"
+            }
+          ]
         }
       },
-      "match": "^[ \\t]*((NotPublic\\s+|AutoLayout\\s+|AnsiClass\\s+|Class\\s+|Public\\s+|NestedPublic\\s+|NestedPrivate\\s+|NestedFamily\\s+|NestedAssembly\\s+|NestedFamANDAssem\\s+|VisibilityMask\\s+|NestedFamORAssem\\s+|SequentialLayout\\s+|ExplicitLayout\\s+|LayoutMask\\s+|ExtendedLayout\\s+|Interface\\s+|ClassSemanticsMask\\s+|Abstract\\s+|Sealed\\s+|SpecialName\\s+|RTSpecialName\\s+|Import\\s+|Serializable\\s+|WindowsRuntime\\s+|UnicodeClass\\s+|AutoClass\\s+|StringFormatMask\\s+|CustomFormatClass\\s+|HasSecurity\\s+|ReservedMask\\s+|BeforeFieldInit\\s+|CustomFormatMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@]*)\\n"
+      "match": "^[ \\t]*((NotPublic\\s+|AutoLayout\\s+|AnsiClass\\s+|Class\\s+|Public\\s+|NestedPublic\\s+|NestedPrivate\\s+|NestedFamily\\s+|NestedAssembly\\s+|NestedFamANDAssem\\s+|VisibilityMask\\s+|NestedFamORAssem\\s+|SequentialLayout\\s+|ExplicitLayout\\s+|LayoutMask\\s+|ExtendedLayout\\s+|Interface\\s+|ClassSemanticsMask\\s+|Abstract\\s+|Sealed\\s+|SpecialName\\s+|RTSpecialName\\s+|Import\\s+|Serializable\\s+|WindowsRuntime\\s+|UnicodeClass\\s+|AutoClass\\s+|StringFormatMask\\s+|CustomFormatClass\\s+|HasSecurity\\s+|ReservedMask\\s+|BeforeFieldInit\\s+|CustomFormatMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@]*)(\\s*:\\s*([a-zA-Z_@][a-zA-Z0-9_@]*))?\\n"
     },
     "custom-attribute": {
       "patterns": [
@@ -220,6 +238,51 @@
               "include": "#punctuation"
             }
           ]
+        }
+      ]
+    },
+    "maxstack": {
+      "captures": {
+        "1": {
+          "name": "keyword"
+        },
+        "2": {
+          "name": "constant.numeric"
+        }
+      },
+      "match": "(\\.maxstack)\\s+([0-9]+)"
+    },
+    "locals": {
+      "begin": "(\\.locals)\\b\\s*(\\()",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword"
+        },
+        "2": {
+          "name": "punctuation"
+        }
+      },
+      "end": "(\\))",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation"
+        }
+      },
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "include": "#type"
+                }
+              ]
+            },
+            "2": {
+              "name": "entity.name.variable"
+            }
+          },
+          "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*)\\s+([a-zA-Z_@][a-zA-Z0-9_@]*)"
         }
       ]
     },
@@ -300,7 +363,7 @@
                       "name": "variable.other"
                     }
                   },
-                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*)(\\.)([a-zA-Z_@][a-zA-Z0-9_@]*)"
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*)(\\.)([a-zA-Z_@][a-zA-Z0-9_@]*)"
                 }
               ]
             }
@@ -344,7 +407,7 @@
                       ]
                     }
                   },
-                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)((\\/)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]]*))?"
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)((\\/)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*))?"
                 }
               ]
             }

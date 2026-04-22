@@ -122,7 +122,7 @@ static class BBLang
 
         repository["hover-popup"] = new Pattern()
         {
-            Match = @"^\([a-z]+\)",
+            Match = @"^\([a-z]+\)(?= )",
             Name = "punctuation"
         };
 
@@ -346,7 +346,7 @@ static class BBLang
 
         repository["punctuation"] = new Pattern()
         {
-            Match = @$"(;|:|,)",
+            Match = @$"(;|:|,|\(|\)|\[|\]|=>|\.)",
             Captures = new()
             {
                 { 1, SyntaxToken.Punctuation },
@@ -373,8 +373,8 @@ static class BBLang
                 new() { Include = "#any-statement" },
                 new() { Include = "#scope" },
                 new() { Include = "#keyword" },
-                new() { Include = "#operator" },
                 new() { Include = "#punctuation" },
+                new() { Include = "#operator" },
             ]
         };
     }

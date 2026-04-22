@@ -424,7 +424,7 @@ static class MSIL
         ];
 
         string IdentifierMatch = @"[a-zA-Z_@][a-zA-Z0-9_@]*";
-        string TypeMatch = @"[a-zA-Z_@][a-zA-Z0-9_@\.\[\]]*";
+        string TypeMatch = @"[a-zA-Z_@][a-zA-Z0-9_@\.\[\]&\*\+]*";
         string AttributesMatch = @$"({string.Join('|', Attributes.Select(v => $"{v} "))})*";
         string GetAttributesMatch<T>() where T : struct, Enum => @$"({string.Join('|', Enum.GetNames<T>().Select(v => @$"{v}\s+"))})*";;
 
@@ -441,13 +441,22 @@ static class MSIL
 
         repository["type"] = new Pattern()
         {
-            Match = $@"([a-zA-Z_@][a-zA-Z0-9_@\.]*\.)?({IdentifierMatch})(\[\])?",
-            Captures = new()
-            {
-                { 1, SyntaxToken.Punctuation },
-                { 2, SyntaxToken.EntityNameType },
-                { 3, SyntaxToken.Punctuation },
-            },
+            Patterns = [
+                new()
+                {
+                    Match = $@"([a-zA-Z_@][a-zA-Z0-9_@\.]*\.)?({IdentifierMatch})",
+                    Captures = new()
+                    {
+                        { 1, SyntaxToken.Punctuation },
+                        { 2, SyntaxToken.EntityNameType },
+                    },
+                },
+                new()
+                {
+                    Match = $@"\[|\]|\*|\&|\+",
+                    Name = SyntaxToken.Punctuation.Name,
+                },
+            ]
         };
 
         repository["scope"] = new Pattern()
@@ -466,6 +475,8 @@ static class MSIL
             },
 
             Patterns = [
+                new() { Include = "#maxstack" },
+                new() { Include = "#locals" },
                 new() { Include = "#instruction" },
                 new() { Include = "#function-definition" },
                 new() { Include = "#constructor-definition" },
@@ -538,11 +549,12 @@ static class MSIL
 
         repository["type-definition"] = new Pattern()
         {
-            Match = @$"^[ \t]*({GetAttributesMatch<TypeAttributes>()})({IdentifierMatch})\n",
+            Match = @$"^[ \t]*({GetAttributesMatch<TypeAttributes>()})({IdentifierMatch})(\s*:\s*({IdentifierMatch}))?\n",
             Captures = new()
             {
                 { 1, new() { Patterns = [ new() { Include = "#attributes" } ] } },
                 { 3, Match.Includes("#type") },
+                { 5, Match.Includes("#type") },
             },
         };
 
@@ -562,6 +574,42 @@ static class MSIL
                         new() { Include = "#punctuation" }
                     ],
                 },
+            ],
+        };
+
+        repository["maxstack"] = new Pattern()
+        {
+            Match = @$"(\.maxstack)\s+([0-9]+)",
+            Captures = new()
+            {
+                { 1, SyntaxToken.Keyword },
+                { 2, SyntaxToken.ConstantNumeric },
+            }
+        };
+
+        repository["locals"] = new Pattern()
+        {
+            Begin = @$"(\.locals)\b\s*(\()",
+            BeginCaptures = new()
+            {
+                { 1, SyntaxToken.Keyword },
+                { 2, SyntaxToken.Punctuation }
+            },
+            End = @$"(\))",
+            EndCaptures = new()
+            {
+                { 1, SyntaxToken.Punctuation }
+            },
+            Patterns = [
+                new()
+                {
+                    Match = @$"({TypeMatch})\s+({IdentifierMatch})",
+                    Captures = new()
+                    {
+                        { 1, Match.Includes("#type") },
+                        { 2, SyntaxToken.EntityNameVariable },
+                    }
+                }
             ],
         };
 

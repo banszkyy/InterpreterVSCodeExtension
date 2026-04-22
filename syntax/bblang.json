@@ -38,10 +38,10 @@
       "include": "#keyword"
     },
     {
-      "include": "#operator"
+      "include": "#punctuation"
     },
     {
-      "include": "#punctuation"
+      "include": "#operator"
     }
   ],
   "repository": {
@@ -185,7 +185,7 @@
       ]
     },
     "hover-popup": {
-      "match": "^\\([a-z]+\\)",
+      "match": "^\\([a-z]+\\)(?= )",
       "name": "punctuation"
     },
     "flow-control-statement": {
@@ -413,7 +413,7 @@
           "name": "punctuation"
         }
       },
-      "match": "(;|:|,)"
+      "match": "(;|:|,|\\(|\\)|\\[|\\]|=>|\\.)"
     }
   },
   "fileTypes": [
