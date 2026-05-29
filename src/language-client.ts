@@ -20,16 +20,23 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(`Path to the language server was changed. Do you want to restart the server?`, ...['Yes', 'No'])
                 .then(e => {
                     if (e === 'Yes') {
-                        stopServer()
-                        startServer(context)
+                        restartServer(context)
                     }
                 })
         }
+    }))
+
+    context.subscriptions.push(vscode.commands.registerCommand(`${utils.languageId}.languageServer.restart`, () => {
+        restartServer(context)
     }))
 }
 
 export function deactivate() {
     stopServer()
+}
+
+function restartServer(context: vscode.ExtensionContext) {
+    return stopServer().then(() => startServer(context))
 }
 
 function startServer(context: vscode.ExtensionContext) {
@@ -38,17 +45,20 @@ function startServer(context: vscode.ExtensionContext) {
     if (!fs.existsSync(extConfig.languageServer.path)) {
         log.warn(`[Language] Language server not found at "${extConfig.languageServer.path}"`)
         vscode.window.showErrorMessage(`Language server not found at "${extConfig.languageServer.path}"`)
-        return
+        return Promise.resolve()
     }
 
     client = new LanguageClientManager(context, extConfig.languageServer.path)
-    client.activate()
+    return client.activate()
 }
 
 function stopServer() {
-    client?.deactivate()
-    client?.dispose()
-    client = null
+    if (!client) return Promise.resolve()
+    return client.deactivate()
+        .finally(() => {
+            client?.dispose()
+            client = null
+        })
 }
 
 export type LanguageClientManagerOptions = {
@@ -61,10 +71,10 @@ export class LanguageClientManager implements Disposable {
     private readonly context: vscode.ExtensionContext
     private readonly outputChannel: vscode.LogOutputChannel
 
+    private compilerStatusBarItem: vscode.StatusBarItem | null
+    private compilerStatusCooldown: NodeJS.Timeout | null
+
     constructor(context: vscode.ExtensionContext, serverPath: string, args: string[] = []) {
-
-        log.debug(`[Language] Language server is at "${serverPath}"`)
-
         const serverOptions: ServerOptions =
         {
             run: { command: serverPath },
@@ -95,6 +105,8 @@ export class LanguageClientManager implements Disposable {
             outputChannel: this.outputChannel,
         }
 
+        log.debug(`[Language] Language server is at "${serverPath}"`)
+
         this.client = new LanguageClient(
             utils.extensionConfigName,
             'BBLang Language Client',
@@ -114,34 +126,34 @@ export class LanguageClientManager implements Disposable {
             root?: string
         }
 
-        let compilerStatusBarItem: vscode.StatusBarItem | null = null
-        let compilerStatusCooldown: NodeJS.Timeout | null = null
+        this.compilerStatusBarItem = null
+        this.compilerStatusCooldown = null
 
         this.client.onNotification('bblang/compiler/status', (status: CompilerStatusNotificationArgs) => {
             log.trace(JSON.stringify(status, null, ' '))
-            if (compilerStatusCooldown) clearTimeout(compilerStatusCooldown)
-            compilerStatusCooldown = setTimeout(() => {
+            if (this.compilerStatusCooldown) clearTimeout(this.compilerStatusCooldown)
+            this.compilerStatusCooldown = setTimeout(() => {
                 if (status.status !== 'done') {
-                    if (!compilerStatusBarItem) {
-                        compilerStatusBarItem = vscode.window.createStatusBarItem()
-                        compilerStatusBarItem.name = `BBLang Compiler`
-                        context.subscriptions.push(compilerStatusBarItem)
+                    if (!this.compilerStatusBarItem) {
+                        this.compilerStatusBarItem = vscode.window.createStatusBarItem()
+                        this.compilerStatusBarItem.name = `BBLang Compiler`
+                        context.subscriptions.push(this.compilerStatusBarItem)
                     }
-                    compilerStatusBarItem.show()
+                    this.compilerStatusBarItem.show()
 
                     if (status.status === 'working') {
-                        compilerStatusBarItem.text = `$(loading~spin) Compiling`
-                        compilerStatusBarItem.backgroundColor = undefined
-                        compilerStatusBarItem.color = undefined
+                        this.compilerStatusBarItem.text = `$(loading~spin) Compiling`
+                        this.compilerStatusBarItem.backgroundColor = undefined
+                        this.compilerStatusBarItem.color = undefined
                     } else if (status.status === 'failed') {
-                        compilerStatusBarItem.text = `$(error) Compiling`
-                        compilerStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground')
-                        compilerStatusBarItem.color = new vscode.ThemeColor('statusBarItem.errorForeground')
+                        this.compilerStatusBarItem.text = `$(error) Compiling`
+                        this.compilerStatusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground')
+                        this.compilerStatusBarItem.color = new vscode.ThemeColor('statusBarItem.errorForeground')
                     }
 
-                    compilerStatusBarItem.tooltip = status.details ?? undefined
+                    this.compilerStatusBarItem.tooltip = status.details ?? undefined
                 } else {
-                    compilerStatusBarItem?.hide()
+                    this.compilerStatusBarItem?.hide()
                 }
             }, 200)
         })
@@ -257,5 +269,8 @@ export class LanguageClientManager implements Disposable {
     public dispose() {
         this.client?.dispose()
         this.outputChannel?.dispose()
+        this.outputChannel.dispose()
+        this.compilerStatusBarItem?.dispose()
+        if (this.compilerStatusCooldown) clearTimeout(this.compilerStatusCooldown)
     }
 }
