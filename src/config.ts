@@ -35,21 +35,21 @@ export function getConfig() {
     const config = vscode.workspace.getConfiguration(utils.extensionConfigName, vscode.window.activeTextEditor ? (vscode.workspace.getWorkspaceFolder(vscode.window.activeTextEditor.document.uri)?.uri ?? null) : null)
     return Object.freeze({
         runtime: {
-            githubUsername: 'BBpezsgo',
+            githubUsername: 'banszkyy',
             githubRepository: 'BBLang',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('runtime.path', path.join(__dirname, 'runtime', `bblang${executableFileExtension}`)),
             pathConfigKey: 'runtime.path',
         },
         languageServer: {
-            githubUsername: 'BBpezsgo',
+            githubUsername: 'banszkyy',
             githubRepository: 'BBLang-LanguageServer',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('server.path', path.join(__dirname, 'language-server', `bblang_languageserver${executableFileExtension}`)),
             pathConfigKey: 'server.path',
         },
         debuggerHost: {
-            githubUsername: 'BBpezsgo',
+            githubUsername: 'banszkyy',
             githubRepository: 'BBLang-DebugHost',
             githubAssetName: dotnetRID ? `${dotnetRID}.zip` : '',
             path: config.get<string>('debug.server.path', path.join(__dirname, 'debug-server', `bblang_debughost${executableFileExtension}`)),

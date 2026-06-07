@@ -25,11 +25,11 @@
     "publisher": "banszky",
     "repository": {
         "type": "git",
-        "url": "https://github.com/BBpezsgo/InterpreterVSCodeExtension"
+        "url": "https://github.com/banszkyy/InterpreterVSCodeExtension"
     },
     "markdown": "github",
     "icon": "icons/extension.png",
-    "homepage": "https://github.com/BBpezsgo/InterpreterVSCodeExtension",
+    "homepage": "https://github.com/banszkyy/InterpreterVSCodeExtension",
     "galleryBanner": {
         "color": "#2d1d37",
         "theme": "dark"
