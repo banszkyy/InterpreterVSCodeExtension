@@ -135,7 +135,7 @@ export class LanguageClientManager implements Disposable {
             this.compilerStatusCooldown = setTimeout(() => {
                 if (status.status !== 'done') {
                     if (!this.compilerStatusBarItem) {
-                        this.compilerStatusBarItem = vscode.window.createStatusBarItem()
+                        this.compilerStatusBarItem = vscode.window.createStatusBarItem('bblang-compiler')
                         this.compilerStatusBarItem.name = `BBLang Compiler`
                         context.subscriptions.push(this.compilerStatusBarItem)
                     }
@@ -172,7 +172,7 @@ export class LanguageClientManager implements Disposable {
             const project = fileToProjectStatus.get(file.toString())
             if (project) {
                 if (!projectStatusBarItem) {
-                    projectStatusBarItem = vscode.window.createStatusBarItem()
+                    projectStatusBarItem = vscode.window.createStatusBarItem('bblang-project')
                     projectStatusBarItem.name = `BBLang Project`
                     context.subscriptions.push(projectStatusBarItem)
                 }
