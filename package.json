@@ -311,24 +311,24 @@
         "list": "vsce ls"
     },
     "devDependencies": {
-        "@types/adm-zip": "latest",
-        "@types/node": "latest",
+        "@types/adm-zip": "^0.5.8",
+        "@types/node": "^26.0.1",
         "@types/vscode": "^1.88.0",
-        "@vscode/test-cli": "latest",
-        "@vscode/test-electron": "latest",
-        "@vscode/vsce": "latest",
-        "typescript": "latest",
-        "vsce": "latest"
+        "@vscode/test-cli": "^0.0.15",
+        "@vscode/test-electron": "^3.0.0",
+        "@vscode/vsce": "^3.9.2",
+        "typescript": "^6.0.3",
+        "vsce": "^2.15.0"
     },
     "dependencies": {
-        "adm-zip": "latest",
+        "adm-zip": "^0.5.17",
         "vscode-jsonrpc": "^8.2.1",
-        "vscode-languageclient": "latest"
+        "vscode-languageclient": "^10.0.1"
     },
     "capabilities": {
         "virtualWorkspaces": {
             "supported": "limited",
-            "description": "Debugging and advanced language features are not avaliable in virtual workspaces"
+            "description": "Debugging and some language features are not avaliable in virtual workspaces"
         }
     }
 }

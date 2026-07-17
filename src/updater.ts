@@ -1,7 +1,7 @@
 import * as https from 'https'
 import * as fs from 'fs'
 import * as path from 'path'
-import * as admZip from 'adm-zip'
+import AdmZip from 'adm-zip'
 import * as vscode from 'vscode'
 import * as utils from './utils'
 import { log } from './extension'
@@ -170,7 +170,7 @@ export async function update(options: UpdateOptions, progress: vscode.Progress<{
 
     progress?.report({ message: 'Extracting' })
     log.trace(`[Updater] Extracting \"${downloadToFile}\" to \"${options.path}\"`)
-    const zip = new admZip(downloadToFile)
+    const zip = new AdmZip(downloadToFile)
     zip.extractAllTo(path.join(options.path, '..'), true, true)
 
     progress?.report({ message: 'Removing temporary files' })
