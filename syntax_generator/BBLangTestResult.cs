@@ -13,7 +13,7 @@ static class BBLangTestResult
             Match = "(\\.)",
             Captures = new()
             {
-                { 1, SyntaxToken.ConstantCharacterEscape },
+                { 1, new(Name.ConstantCharacterEscape) },
             }
         };
 
@@ -25,8 +25,8 @@ static class BBLangTestResult
                     Match = @"(#exitcode)\s+(-?\d+)\n",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
-                        { 2, SyntaxToken.ConstantNumeric },
+                        { 1, new(Name.Keyword) },
+                        { 2, new(Name.ConstantNumeric) },
                     },
                 },
                 new()
@@ -34,8 +34,8 @@ static class BBLangTestResult
                     Match = @"(#exposed)\s+(\w+)(.*)\n",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
-                        { 2, SyntaxToken.StringUnquoted },
+                        { 1, new(Name.Keyword) },
+                        { 2, new(Name.StringUnquoted) },
                         { 3,
                         new Match()
                         {
@@ -45,7 +45,7 @@ static class BBLangTestResult
                                     Match = @"(=>)",
                                     Captures = new()
                                     {
-                                        { 1, SyntaxToken.Punctuation },
+                                        { 1, new(Name.Punctuation) },
                                     },
                                 },
                                 new Pattern()
@@ -53,9 +53,9 @@ static class BBLangTestResult
                                     Match = @"(i8|i16|i32)(:)(-?\d+)",
                                     Captures = new()
                                     {
-                                        { 1, SyntaxToken.EntityNameType },
-                                        { 2, SyntaxToken.Punctuation },
-                                        { 3, SyntaxToken.ConstantNumeric },
+                                        { 1, new(Name.EntityNameType) },
+                                        { 2, new(Name.Punctuation) },
+                                        { 3, new(Name.ConstantNumeric) },
                                     },
                                 },
                                 new Pattern()
@@ -63,9 +63,9 @@ static class BBLangTestResult
                                     Match = @"(f32)(:)(-?(\d+(\.\d+)?))",
                                     Captures = new()
                                     {
-                                        { 1, SyntaxToken.EntityNameType },
-                                        { 2, SyntaxToken.Punctuation },
-                                        { 3, SyntaxToken.ConstantNumeric },
+                                        { 1, new(Name.EntityNameType) },
+                                        { 2, new(Name.Punctuation) },
+                                        { 3, new(Name.ConstantNumeric) },
                                     },
                                 },
                             ]
@@ -77,7 +77,7 @@ static class BBLangTestResult
                     Match = "(#.*)\n",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Invalid },
+                        { 1, new(Name.Invalid) },
                     },
                 },
             ],

@@ -21,8 +21,8 @@ static class BBLangIL
             Match = "([a-zA-Z][a-zA-Z0-9]*)(:)",
             Captures = new()
             {
-                { 1, SyntaxToken.EntityNameFunction },
-                { 2, SyntaxToken.Punctuation },
+                { 1, new(Name.EntityNameFunction) },
+                { 2, new(Name.Punctuation) },
             }
         };
 
@@ -31,8 +31,8 @@ static class BBLangIL
             Match = "([0-9]+:)[ \\t]+([a-zA-Z0-9]+)[ \\t]*([a-zA-Z0-9\\[\\] \\<\\>\\+\\-]*)",
             Captures = new()
             {
-                { 1, SyntaxToken.Comment },
-                { 2, SyntaxToken.EntityNameFunction },
+                { 1, new(Name.Comment) },
+                { 2, new(Name.EntityNameFunction) },
                 { 3, Match.Includes("#operand") },
             }
         };
@@ -45,9 +45,9 @@ static class BBLangIL
                     Match = "(\\<{1,2})([a-zA-Z0-9]+)(\\>{1,2})",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Punctuation },
-                        { 2, SyntaxToken.EntityNameFunction },
-                        { 3, SyntaxToken.Punctuation },
+                        { 1, new(Name.Punctuation) },
+                        { 2, new(Name.EntityNameFunction) },
+                        { 3, new(Name.Punctuation) },
                     },
                 },
                 new()
@@ -55,7 +55,7 @@ static class BBLangIL
                     Match = "\\b(BYTE|WORD|DWORD|QWORD)\\b",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.EntityNameType },
+                        { 1, new(Name.EntityNameType) },
                     },
                 },
                 new()
@@ -63,7 +63,7 @@ static class BBLangIL
                     Match = "\\b(RCP|RSP|RBP|RAX|EAX|AX|AH|AL|RBX|EBX|BX|BH|BL|ECX|RCX|CX|CH|CL|RDX|EDX|DX|DH|DL|BP|SP)\\b",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                     },
                 },
                 new()
@@ -71,7 +71,7 @@ static class BBLangIL
                     Match = "\\b([0-9]+)\\b",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.ConstantNumeric },
+                        { 1, new(Name.ConstantNumeric) },
                     }
                 },
                 new()
@@ -79,8 +79,8 @@ static class BBLangIL
                     Match = "(#)([a-zA-Z0-9_]+)\\b",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Punctuation },
-                        { 2, SyntaxToken.VariableName },
+                        { 1, new(Name.Punctuation) },
+                        { 2, new(Name.VariableName) },
                     },
                 },
                 new()
@@ -88,8 +88,19 @@ static class BBLangIL
                     Match = "(\\[|\\]|\\+|\\-)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Punctuation },
+                        { 1, new(Name.Punctuation) },
                     },
+                },
+            ],
+        };
+
+        repository["comment"] = new Pattern()
+        {
+            Patterns = [
+                new()
+                {
+                    Match = "^.*$",
+                    Name = Name.CommentLine,
                 },
             ],
         };
@@ -104,6 +115,7 @@ static class BBLangIL
             Patterns = [
                 new() { Include = "#label" },
                 new() { Include = "#instruction" },
+                new() { Include = "#comment" },
             ]
         };
     }

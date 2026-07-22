@@ -10,119 +10,44 @@ namespace LanguageCore.SyntaxGenerator;
 
 class SyntaxFile
 {
-    [JsonPropertyName("$schema")]
-    public string? Schema { get; set; }
-
-    [JsonPropertyName("patterns")]
-    public Pattern[]? Patterns { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("repository")]
-    public Dictionary<string, Pattern>? Repository { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("fileTypes")]
-    public string[]? FileTypes { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("firstLineMatch")]
-    public string? FirstLineMatch { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("foldingStartMarker")]
-    public string? FoldingStartMarker { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("foldingStopMarker")]
-    public string? FoldingStopMarker { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-
-    [JsonPropertyName("scopeName")]
-    public string? ScopeName { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("uuid")]
-    public string? Uuid { get; set; }
+    [JsonPropertyName("$schema")] public string? Schema { get; set; }
+    [JsonPropertyName("patterns")] public Pattern[]? Patterns { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("repository")] public Dictionary<string, Pattern>? Repository { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("fileTypes")] public string[]? FileTypes { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("firstLineMatch")] public string? FirstLineMatch { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("foldingStartMarker")] public string? FoldingStartMarker { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("foldingStopMarker")] public string? FoldingStopMarker { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("name")] public string? Name { get; set; }
+    [JsonPropertyName("scopeName")] public string? ScopeName { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("uuid")] public string? Uuid { get; set; }
 }
 
 class Pattern
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("applyEndPatternLast")]
-    public long? ApplyEndPatternLast { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("begin")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("applyEndPatternLast")] public long? ApplyEndPatternLast { get; set; }
     [StringSyntax("regex")]
-    public string? Begin { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("beginCaptures")]
-    public Dictionary<int, Match>? BeginCaptures { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("captures")]
-    public Dictionary<int, Match>? Captures { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("comment")]
-    public string? Comment { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("contentName")]
-    public string? ContentName { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("disabled")]
-    public long? Disabled { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("end")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("begin")] public string? Begin { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("beginCaptures")] public Dictionary<int, Match>? BeginCaptures { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("captures")] public Dictionary<int, Match>? Captures { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("comment")] public string? Comment { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("contentName")] public string? ContentName { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("disabled")] public long? Disabled { get; set; }
     [StringSyntax("regex")]
-    public string? End { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("endCaptures")]
-    public Dictionary<int, Match>? EndCaptures { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("include")]
-    public string? Include { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("match")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("end")] public string? End { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("endCaptures")] public Dictionary<int, Match>? EndCaptures { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("include")] public string? Include { get; set; }
     [StringSyntax("regex")]
-    public string? Match { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("patterns")]
-    public Pattern[]? Patterns { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("while")]
-    public string? While { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("whileCaptures")]
-    public Dictionary<int, Match>? WhileCaptures { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("match")] public string? Match { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("name")] public string? Name { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("patterns")] public Pattern[]? Patterns { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("while")] public string? While { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("whileCaptures")] public Dictionary<int, Match>? WhileCaptures { get; set; }
 }
 
 class Match
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonPropertyName("patterns")]
-    public Pattern[]? Patterns { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("name")] public string? Name { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull), JsonPropertyName("patterns")] public Pattern[]? Patterns { get; set; }
 
     public Match() { }
 
@@ -219,7 +144,6 @@ class IsoDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
         string text;
 
-
         if ((_dateTimeStyles & DateTimeStyles.AdjustToUniversal) == DateTimeStyles.AdjustToUniversal
                 || (_dateTimeStyles & DateTimeStyles.AssumeUniversal) == DateTimeStyles.AssumeUniversal)
         {
@@ -251,7 +175,6 @@ class IsoDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
             return default;
         }
     }
-
 
     public static readonly IsoDateTimeOffsetConverter Singleton = new();
 }

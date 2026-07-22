@@ -435,7 +435,7 @@ static class MSIL
             Match = $@"({string.Join('|', Attributes)})",
             Captures = new()
             {
-                { 1, SyntaxToken.Keyword }
+                { 1, new(Name.Keyword) }
             }
         };
 
@@ -447,14 +447,14 @@ static class MSIL
                     Match = $@"([a-zA-Z_@][a-zA-Z0-9_@\.]*\.)?({IdentifierMatch})",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Punctuation },
-                        { 2, SyntaxToken.EntityNameType },
+                        { 1, new(Name.Punctuation) },
+                        { 2, new(Name.EntityNameType) },
                     },
                 },
                 new()
                 {
                     Match = $@"\[|\]|\*|\&|\+",
-                    Name = SyntaxToken.Punctuation.Name,
+                    Name = Name.Punctuation,
                 },
             ]
         };
@@ -466,12 +466,12 @@ static class MSIL
 
             BeginCaptures = new()
             {
-                { 0, SyntaxToken.Punctuation },
+                { 0, new(Name.Punctuation) },
             },
 
             EndCaptures = new()
             {
-                { 0, SyntaxToken.Punctuation },
+                { 0, new(Name.Punctuation) },
             },
 
             Patterns = [
@@ -494,7 +494,7 @@ static class MSIL
             {
                 { 1, new() { Patterns = [ new() { Include = "#attributes" } ] } },
                 { 3, Match.Includes("#type") },
-                { 4, SyntaxToken.VariableOther },
+                { 4, new(Name.VariableOther) },
             },
         };
 
@@ -504,7 +504,7 @@ static class MSIL
             Captures = new()
             {
                 { 1, new() { Patterns = [ new() { Include = "#attributes" } ] } },
-                { 3, SyntaxToken.Keyword },
+                { 3, new(Name.Keyword) },
                 { 4, new()
                 {
                     Patterns = [
@@ -514,7 +514,7 @@ static class MSIL
                             Captures = new()
                             {
                                 { 1, Match.Includes("#type") },
-                                { 2, SyntaxToken.VariableParameter },
+                                { 2, new(Name.VariableParameter) },
                             }
                         }
                     ]
@@ -529,7 +529,7 @@ static class MSIL
             {
                 { 1, new() { Patterns = [ new() { Include = "#attributes" } ] } },
                 { 3, Match.Includes("#type") },
-                { 4, SyntaxToken.EntityNameFunction },
+                { 4, new(Name.EntityNameFunction) },
                 { 5, new()
                 {
                     Patterns = [
@@ -539,7 +539,7 @@ static class MSIL
                             Captures = new()
                             {
                                 { 1, Match.Includes("#type") },
-                                { 2, SyntaxToken.VariableParameter },
+                                { 2, new(Name.VariableParameter) },
                             }
                         }
                     ]
@@ -566,8 +566,8 @@ static class MSIL
                     Match = @$"\[([a-zA-Z0-9\.]+\.)?([a-zA-Z0-9]+)\((.*)\)\]",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Punctuation },
-                        { 2, SyntaxToken.EntityNameType },
+                        { 1, new(Name.Punctuation) },
+                        { 2, new(Name.EntityNameType) },
                         { 3, Match.Includes("#literal") },
                     },
                     Patterns = [
@@ -582,8 +582,8 @@ static class MSIL
             Match = @$"(\.maxstack)\s+([0-9]+)",
             Captures = new()
             {
-                { 1, SyntaxToken.Keyword },
-                { 2, SyntaxToken.ConstantNumeric },
+                { 1, new(Name.Keyword) },
+                { 2, new(Name.ConstantNumeric) },
             }
         };
 
@@ -592,13 +592,13 @@ static class MSIL
             Begin = @$"(\.locals)\b\s*(\()",
             BeginCaptures = new()
             {
-                { 1, SyntaxToken.Keyword },
-                { 2, SyntaxToken.Punctuation }
+                { 1, new(Name.Keyword) },
+                { 2, new(Name.Punctuation) }
             },
             End = @$"(\))",
             EndCaptures = new()
             {
-                { 1, SyntaxToken.Punctuation }
+                { 1, new(Name.Punctuation) }
             },
             Patterns = [
                 new()
@@ -607,7 +607,7 @@ static class MSIL
                     Captures = new()
                     {
                         { 1, Match.Includes("#type") },
-                        { 2, SyntaxToken.EntityNameVariable },
+                        { 2, new(Name.EntityNameVariable) },
                     }
                 }
             ],
@@ -621,8 +621,8 @@ static class MSIL
                     Match = @$"\b({string.Join('|', [OpCodes.Starg, OpCodes.Starg_S, OpCodes.Ldarg, OpCodes.Ldarga, OpCodes.Ldarga_S])})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
-                        { 2, SyntaxToken.VariableParameter },
+                        { 1, new(Name.Keyword) },
+                        { 2, new(Name.VariableParameter) },
                     },
                 },
                 new()
@@ -630,7 +630,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineNone).Select(v => v.Name))})",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                     },
                 },
                 new()
@@ -638,7 +638,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineI or OperandType.InlineI8 or OperandType.InlineR or OperandType.InlineString or OperandType.ShortInlineI or OperandType.ShortInlineR).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                         { 2, Match.Includes("#number") },
                     },
                 },
@@ -647,8 +647,8 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineBrTarget or OperandType.ShortInlineBrTarget).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
-                        { 2, SyntaxToken.VariableOther },
+                        { 1, new(Name.Keyword) },
+                        { 2, new(Name.VariableOther) },
                     },
                 },
                 new()
@@ -656,7 +656,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineField).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                         { 2, new() { Patterns = [
                             new()
                             {
@@ -665,8 +665,8 @@ static class MSIL
                                 {
                                     { 1, Match.Includes("#type") },
                                     { 2, Match.Includes("#type") },
-                                    { 3, SyntaxToken.Punctuation },
-                                    { 4, SyntaxToken.VariableOther },
+                                    { 3, new(Name.Punctuation) },
+                                    { 4, new(Name.VariableOther) },
                                 }
                             }
                         ] } },
@@ -677,7 +677,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineMethod).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                         { 2, new() { Patterns = [
                             new()
                             {
@@ -685,9 +685,9 @@ static class MSIL
                                 Captures = new()
                                 {
                                     { 1, Match.Includes("#type") },
-                                    { 2, SyntaxToken.EntityNameFunction },
+                                    { 2, new(Name.EntityNameFunction) },
                                     { 3, Match.Includes("#type") },
-                                    { 5, SyntaxToken.Punctuation },
+                                    { 5, new(Name.Punctuation) },
                                     { 6, Match.Includes("#type") },
                                 }
                             }
@@ -699,7 +699,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineSig).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                     },
                 },
                 new()
@@ -707,7 +707,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineString).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                         { 2, Match.Includes("#string") },
                     },
                 },
@@ -716,7 +716,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineSwitch).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                     },
                 },
                 new()
@@ -724,7 +724,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineTok).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                     },
                 },
                 new()
@@ -732,7 +732,7 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineType).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                         { 2, Match.Includes("#type") },
                     },
                 },
@@ -741,8 +741,8 @@ static class MSIL
                     Match = @$"\b({string.Join('|', opCodes.Where(v => v.OperandType is OperandType.InlineVar or OperandType.ShortInlineVar).Select(v => v.Name))})\s+(.+)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
-                        { 2, SyntaxToken.EntityNameVariable },
+                        { 1, new(Name.Keyword) },
+                        { 2, new(Name.EntityNameVariable) },
                     },
                 },
             ],
@@ -760,7 +760,7 @@ static class MSIL
         repository["comment"] = new Pattern()
         {
             Match = @"\/\/[^\n]*\n",
-            Name = "comment.line"
+            Name = Name.CommentLineDoubleSlash
         };
 
         repository["comment-block"] = new Pattern()
@@ -770,21 +770,21 @@ static class MSIL
                 {
                     Begin = @"/\*",
                     End = @"\*/",
-                    Name = "comment.block",
+                    Name = Name.CommentBlock,
 
                     BeginCaptures = new()
                     {
-                        { 0, new() { Name = "punctuation.definition.comment.begin.msil" } }
+                        { 0, new(Name.Punctuation["definition.comment.begin"]) }
                     },
                     EndCaptures = new()
                     {
-                        { 0, new() { Name = "punctuation.definition.comment.end.msil" } },
+                        { 0, new(Name.Punctuation["definition.comment.end"]) },
                     }
                 },
                 new()
                 {
                     Match = @"\*/.*\n",
-                    Name = "invalid.illegal.stray-comment-end.msil"
+                    Name = Name.InvalidIllegal["stray-comment-end"]
                 }
             ]
         };
@@ -802,7 +802,7 @@ static class MSIL
                 {
                     Begin = "\"",
                     End = "\"",
-                    Name = "string.quoted.double",
+                    Name = Name.StringQuotedDouble,
                     Patterns =
                     [
                         new() { Include = "#string-escaped-char" }
@@ -812,7 +812,7 @@ static class MSIL
                 {
                     Begin = "'",
                     End = "'",
-                    Name = "string.quoted.single",
+                    Name = Name.StringQuotedSingle,
                     Patterns =
                     [
                         new() { Include = "#string-escaped-char" }
@@ -828,12 +828,12 @@ static class MSIL
                 new()
                 {
                     Match = @"(?x)\\(\\|[ntr\""e]|0|(u[0-9a-fA-F]{4}))",
-                    Name = "constant.character.escape"
+                    Name = Name.ConstantCharacterEscape
                 },
                 new()
                 {
                     Match = @"\\(u[0-9a-zA-Z]{4}|.)",
-                    Name = "invalid.illegal.unknown-escape.msil"
+                    Name = Name.InvalidIllegal["unknown-escape"]
                 }
             ]
         };
@@ -843,7 +843,7 @@ static class MSIL
             Match = @$"(;|,)",
             Captures = new()
             {
-                { 1, SyntaxToken.Punctuation },
+                { 1, new(Name.Punctuation) },
             }
         };
 

@@ -42,23 +42,23 @@ static class BBLang
                     Match = @$"(#if)\s *({anyIdentifier})",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Comment },
-                        { 2, SyntaxToken.Comment },
+                        { 1, new(Name.Comment) },
+                        { 2, new(Name.Comment) },
                     },
                 },
                 new Pattern(){
                     Match = @$"(#else)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Comment },
-                        { 2, SyntaxToken.Comment },
+                        { 1, new(Name.Comment) },
+                        { 2, new(Name.Comment) },
                     },
                 },
                 new Pattern(){
                     Match = @"(#endif)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Comment },
+                        { 1, new(Name.Comment) },
                     },
                 }
             ]
@@ -71,21 +71,21 @@ static class BBLang
                     Match = @$"\b({string.Join('|', TypeKeywords.List)})\b",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Keyword },
+                        { 1, new(Name.Keyword) },
                     },
                 },
                 new Pattern() {
                     Match = @$"\b(\w+)\b",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.EntityNameType },
+                        { 1, new(Name.EntityNameType) },
                     },
                 },
                 new Pattern() {
                     Match = @$"(\<|\>)",
                     Captures = new()
                     {
-                        { 1, SyntaxToken.Punctuation },
+                        { 1, new(Name.Punctuation) },
                     }
                 },
                 new Pattern() { Include = "#operator" },
@@ -123,7 +123,7 @@ static class BBLang
         repository["hover-popup"] = new Pattern()
         {
             Match = @"^\([a-z]+\)(?= )",
-            Name = "punctuation"
+            Name = Name.Punctuation
         };
 
         repository["flow-control-statement"] = new Pattern()
@@ -138,14 +138,14 @@ static class BBLang
                 StatementKeywords.Break)})\b",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordControl },
+                { 1, new(Name.KeywordControl) },
             }
         };
 
         repository["comment"] = new Pattern()
         {
             Match = @"\/\/[^\n]*\n",
-            Name = "comment.line"
+            Name = Name.CommentLineDoubleSlash
         };
 
         repository["comment-block"] = new Pattern()
@@ -155,21 +155,32 @@ static class BBLang
                 {
                     Begin = @"/\*",
                     End = @"\*/",
-                    Name = "comment.block",
+                    Name = Name.CommentBlock,
 
                     BeginCaptures = new()
                     {
-                        { 0, new() { Name = "punctuation.definition.comment.begin.bbc" } }
+                        { 0, new(Name.Punctuation["definition.comment.begin"]) }
                     },
                     EndCaptures = new()
                     {
-                        { 0, new() { Name = "punctuation.definition.comment.end.bbc" } },
-                    }
+                        { 0, new(Name.Punctuation["definition.comment.end"]) },
+                    },
+
+                    Patterns = [
+                        new()
+                        {
+                            Match = @"^[ \t]*(\*)(?!/)",
+                            Captures = new()
+                            {
+                                { 1, new(Name.Punctuation["definition.comment"]) }
+                            }
+                        }
+                    ]
                 },
                 new()
                 {
                     Match = @"\*/.*\n",
-                    Name = "invalid.illegal.stray-comment-end.bbc"
+                    Name = Name.InvalidIllegal["stray-comment-end"]
                 }
             ]
         };
@@ -177,7 +188,7 @@ static class BBLang
         repository["number"] = new Pattern()
         {
             Match = @"(\.[0-9]+f?\b|\b[0-9]+f?\b|\b0x[0-9a-fA-F_]+\b|\b0b[01_]+\b|\b[0-9]e[0-9]f?\b)",
-            Name = "constant.numeric"
+            Name = Name.ConstantNumeric
         };
 
         repository["struct-definition"] = new Pattern()
@@ -185,8 +196,8 @@ static class BBLang
             Match = @$"({DeclarationKeywords.Struct})[\s]+({identifier})",
             Captures = new()
             {
-                { 1, SyntaxToken.Keyword },
-                { 2, SyntaxToken.EntityNameType },
+                { 1, new(Name.Keyword) },
+                { 2, new(Name.EntityNameType) },
             }
         };
 
@@ -195,8 +206,8 @@ static class BBLang
             Match = @$"({DeclarationKeywords.Alias})\s+({identifier})\s+",
             Captures = new()
             {
-                { 1, SyntaxToken.Keyword },
-                { 2, SyntaxToken.EntityNameType },
+                { 1, new(Name.Keyword) },
+                { 2, new(Name.EntityNameType) },
             }
         };
 
@@ -205,9 +216,9 @@ static class BBLang
             Match = @$"({DeclarationKeywords.Enum})\s+({identifier})(\s*(:)\s*({typeRegex}))?",
             Captures = new()
             {
-                { 1, SyntaxToken.Keyword },
-                { 2, SyntaxToken.EntityNameType },
-                { 4, SyntaxToken.Punctuation },
+                { 1, new(Name.Keyword) },
+                { 2, new(Name.EntityNameType) },
+                { 4, new(Name.Punctuation) },
                 { 5, Match.Includes("#type") },
             },
         };
@@ -217,8 +228,8 @@ static class BBLang
             Match = @$"\b({DeclarationKeywords.Using})\s+([a-zA-Z0-9_\.]+)",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordControl },
-                { 2, SyntaxToken.String },
+                { 1, new(Name.KeywordControl) },
+                { 2, new(Name.String) },
             }
         };
 
@@ -227,7 +238,7 @@ static class BBLang
             Match = @$"\b({keywords})\b",
             Captures = new()
             {
-                { 1, SyntaxToken.Keyword },
+                { 1, new(Name.Keyword) },
             }
         };
 
@@ -236,7 +247,7 @@ static class BBLang
             Match = @$"\b({identifier})\b\s*(?=\()",
             Captures = new()
             {
-                { 1, SyntaxToken.EntityNameFunction },
+                { 1, new(Name.EntityNameFunction) },
             }
         };
 
@@ -249,7 +260,7 @@ static class BBLang
                     Captures = new()
                     {
                         { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
-                        { 2, SyntaxToken.EntityNameFunction },
+                        { 2, new(Name.EntityNameFunction) },
                     }
                 },
                 new()
@@ -258,14 +269,14 @@ static class BBLang
                     Captures = new()
                     {
                         { 1, new() { Patterns = [ new() { Include = "#type" } ] } },
-                        { 2, SyntaxToken.EntityNameFunction },
+                        { 2, new(Name.EntityNameFunction) },
                         { 3, new() { Patterns = [
                             new()
                             {
                                 Match = @$"\b(\w+)\b",
                                 Captures = new()
                                 {
-                                    { 1, SyntaxToken.EntityNameType }
+                                    { 1, new(Name.EntityNameType) }
                                 }
                             }
                         ] } },
@@ -288,7 +299,7 @@ static class BBLang
             Match = @$"\.\s*({identifier})\b",
             Captures = new()
             {
-                { 1, SyntaxToken.EntityNameVariable },
+                { 1, new(Name.EntityNameVariable) },
             }
         };
 
@@ -299,7 +310,7 @@ static class BBLang
                 {
                     Begin = "\"",
                     End = "\"",
-                    Name = "string.quoted.double",
+                    Name = Name.StringQuotedDouble,
                     Patterns =
                     [
                         new() { Include = "#string-escaped-char" }
@@ -309,7 +320,7 @@ static class BBLang
                 {
                     Begin = "'",
                     End = "'",
-                    Name = "string.quoted.single",
+                    Name = Name.StringQuotedSingle,
                     Patterns =
                     [
                         new() { Include = "#string-escaped-char" }
@@ -325,12 +336,12 @@ static class BBLang
                 new()
                 {
                     Match = @"(?x)\\(\\|[ntr\""e]|0|(u[0-9a-fA-F]{4}))",
-                    Name = "constant.character.escape"
+                    Name = Name.ConstantCharacterEscape
                 },
                 new()
                 {
                     Match = @"\\(u[0-9a-zA-Z]{4}|.)",
-                    Name = "invalid.illegal.unknown-escape.bbc"
+                    Name = Name.InvalidIllegal["unknown-escape"]
                 }
             ]
         };
@@ -340,7 +351,7 @@ static class BBLang
             Match = @$"(<|>|<=|>=|==|!=|!|-|\+|\*|\/|&|\+=|-=|\*=|\/=|&=|\^=|\^|\|=|%|<<|>>|&&|\|\||~|\+\+|--|=)",
             Captures = new()
             {
-                { 1, SyntaxToken.KeywordOperator },
+                { 1, new(Name.KeywordOperator) },
             }
         };
 
@@ -349,7 +360,7 @@ static class BBLang
             Match = @$"(;|:|,|\(|\)|\[|\]|=>|\.)",
             Captures = new()
             {
-                { 1, SyntaxToken.Punctuation },
+                { 1, new(Name.Punctuation) },
             }
         };
 
