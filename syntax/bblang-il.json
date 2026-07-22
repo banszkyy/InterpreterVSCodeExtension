@@ -6,6 +6,9 @@
     },
     {
       "include": "#instruction"
+    },
+    {
+      "include": "#comment"
     }
   ],
   "repository": {
@@ -96,6 +99,14 @@
             }
           },
           "match": "(\\[|\\]|\\+|\\-)"
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "match": "^.*$",
+          "name": "comment.line"
         }
       ]
     }

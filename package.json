@@ -129,7 +129,11 @@
                 "aliases": [],
                 "extensions": [
                     ".il"
-                ]
+                ],
+                "icon": {
+                    "dark": "./icons/files/msil.svg",
+                    "light": "./icons/files/msil.svg"
+                }
             }
         ],
         "grammars": [

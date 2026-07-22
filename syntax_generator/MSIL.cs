@@ -186,7 +186,7 @@ static class MSIL
             @"xor",
         ];
 
-        ImmutableArray<string> Attributes =[..
+        ImmutableArray<string> Attributes = [..
             Enum.GetNames<MethodAttributes>()
             .Append(Enum.GetNames<TypeAttributes>())
             .Append(Enum.GetNames<FieldAttributes>())
@@ -424,9 +424,9 @@ static class MSIL
         ];
 
         string IdentifierMatch = @"[a-zA-Z_@][a-zA-Z0-9_@]*";
-        string TypeMatch = @"[a-zA-Z_@][a-zA-Z0-9_@\.\[\]&\*\+]*";
+        string TypeMatch = @"[a-zA-Z_@][a-zA-Z0-9_@\.\[\]&\*\+`]*";
         string AttributesMatch = @$"({string.Join('|', Attributes.Select(v => $"{v} "))})*";
-        string GetAttributesMatch<T>() where T : struct, Enum => @$"({string.Join('|', Enum.GetNames<T>().Select(v => @$"{v}\s+"))})*";;
+        string GetAttributesMatch<T>() where T : struct, Enum => @$"({string.Join('|', Enum.GetNames<T>().Select(v => @$"{v}\s+"))})*"; ;
 
         Dictionary<string, Pattern> repository = [];
 
@@ -444,6 +444,11 @@ static class MSIL
             Patterns = [
                 new()
                 {
+                    Match = @"\b(void|bool|byte|sbyte|char|decimal|double|float|int|uint|nint|nuint|long|ulong|short|ushort|object|string|dynamic)\b",
+                    Name = Name.Keyword,
+                },
+                new()
+                {
                     Match = $@"([a-zA-Z_@][a-zA-Z0-9_@\.]*\.)?({IdentifierMatch})",
                     Captures = new()
                     {
@@ -453,7 +458,12 @@ static class MSIL
                 },
                 new()
                 {
-                    Match = $@"\[|\]|\*|\&|\+",
+                    Match = @"\[|\]|\*|\&|\+|`",
+                    Name = Name.Punctuation,
+                },
+                new()
+                {
+                    Match = @"\b\d+\b",
                     Name = Name.Punctuation,
                 },
             ]
@@ -549,7 +559,7 @@ static class MSIL
 
         repository["type-definition"] = new Pattern()
         {
-            Match = @$"^[ \t]*({GetAttributesMatch<TypeAttributes>()})({IdentifierMatch})(\s*:\s*({IdentifierMatch}))?\n",
+            Match = @$"^[ \t]*({GetAttributesMatch<TypeAttributes>()})({IdentifierMatch})(\s*:\s*({TypeMatch}))?\n",
             Captures = new()
             {
                 { 1, new() { Patterns = [ new() { Include = "#attributes" } ] } },
@@ -681,11 +691,24 @@ static class MSIL
                         { 2, new() { Patterns = [
                             new()
                             {
-                                Match = @$"({TypeMatch}) ({IdentifierMatch})\((.*)\)((\/)({TypeMatch}))?",
+                                Match = @$"({TypeMatch}) ({IdentifierMatch})(\[({TypeMatch}[, ]{{0,2}})+\])?\((.*)\)((\/)({TypeMatch}))?",
                                 Captures = new()
                                 {
                                     { 1, Match.Includes("#type") },
                                     { 2, new(Name.EntityNameFunction) },
+                                    { 3, Match.Includes("#type") },
+                                    { 5, Match.Includes("#type") },
+                                    { 7, new(Name.Punctuation) },
+                                    { 8, Match.Includes("#type") },
+                                }
+                            },
+                            new()
+                            {
+                                Match = @$"({TypeMatch}) (\.ctor)\((.*)\)((\/)({TypeMatch}))?",
+                                Captures = new()
+                                {
+                                    { 1, Match.Includes("#type") },
+                                    { 2, new(Name.KeywordOther) },
                                     { 3, Match.Includes("#type") },
                                     { 5, new(Name.Punctuation) },
                                     { 6, Match.Includes("#type") },
@@ -797,27 +820,12 @@ static class MSIL
 
         repository["string"] = new Pattern()
         {
-            Patterns = [
-                new()
-                {
-                    Begin = "\"",
-                    End = "\"",
-                    Name = Name.StringQuotedDouble,
-                    Patterns =
-                    [
-                        new() { Include = "#string-escaped-char" }
-                    ]
-                },
-                new()
-                {
-                    Begin = "'",
-                    End = "'",
-                    Name = Name.StringQuotedSingle,
-                    Patterns =
-                    [
-                        new() { Include = "#string-escaped-char" }
-                    ]
-                }
+            Begin = "\"",
+            End = "\"",
+            Name = Name.StringQuotedDouble,
+            Patterns =
+            [
+                new() { Include = "#string-escaped-char" }
             ]
         };
 

@@ -35,6 +35,10 @@
     "type": {
       "patterns": [
         {
+          "match": "\\b(void|bool|byte|sbyte|char|decimal|double|float|int|uint|nint|nuint|long|ulong|short|ushort|object|string|dynamic)\\b",
+          "name": "keyword"
+        },
+        {
           "captures": {
             "1": {
               "name": "punctuation"
@@ -46,7 +50,11 @@
           "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.]*\\.)?([a-zA-Z_@][a-zA-Z0-9_@]*)"
         },
         {
-          "match": "\\[|\\]|\\*|\\&|\\+",
+          "match": "\\[|\\]|\\*|\\&|\\+|`",
+          "name": "punctuation"
+        },
+        {
+          "match": "\\b\\d+\\b",
           "name": "punctuation"
         }
       ]
@@ -111,7 +119,7 @@
           "name": "variable.other"
         }
       },
-      "match": "^[ \\t]*((PrivateScope\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|FieldAccessMask\\s+|Static\\s+|InitOnly\\s+|Literal\\s+|NotSerialized\\s+|HasFieldRVA\\s+|SpecialName\\s+|RTSpecialName\\s+|HasFieldMarshal\\s+|PinvokeImpl\\s+|HasDefault\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+      "match": "^[ \\t]*((PrivateScope\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|FieldAccessMask\\s+|Static\\s+|InitOnly\\s+|Literal\\s+|NotSerialized\\s+|HasFieldRVA\\s+|SpecialName\\s+|RTSpecialName\\s+|HasFieldMarshal\\s+|PinvokeImpl\\s+|HasDefault\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
     },
     "constructor-definition": {
       "captures": {
@@ -140,7 +148,7 @@
                   "name": "variable.parameter"
                 }
               },
-              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
             }
           ]
         }
@@ -181,12 +189,12 @@
                   "name": "variable.parameter"
                 }
               },
-              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
+              "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)"
             }
           ]
         }
       },
-      "match": "^[ \\t]*((PrivateScope\\s+|ReuseSlot\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|MemberAccessMask\\s+|UnmanagedExport\\s+|Static\\s+|Final\\s+|Virtual\\s+|HideBySig\\s+|NewSlot\\s+|VtableLayoutMask\\s+|CheckAccessOnOverride\\s+|Abstract\\s+|SpecialName\\s+|RTSpecialName\\s+|PinvokeImpl\\s+|HasSecurity\\s+|RequireSecObject\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)"
+      "match": "^[ \\t]*((PrivateScope\\s+|ReuseSlot\\s+|Private\\s+|FamANDAssem\\s+|Assembly\\s+|Family\\s+|FamORAssem\\s+|Public\\s+|MemberAccessMask\\s+|UnmanagedExport\\s+|Static\\s+|Final\\s+|Virtual\\s+|HideBySig\\s+|NewSlot\\s+|VtableLayoutMask\\s+|CheckAccessOnOverride\\s+|Abstract\\s+|SpecialName\\s+|RTSpecialName\\s+|PinvokeImpl\\s+|HasSecurity\\s+|RequireSecObject\\s+|ReservedMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)"
     },
     "type-definition": {
       "captures": {
@@ -212,7 +220,7 @@
           ]
         }
       },
-      "match": "^[ \\t]*((NotPublic\\s+|AutoLayout\\s+|AnsiClass\\s+|Class\\s+|Public\\s+|NestedPublic\\s+|NestedPrivate\\s+|NestedFamily\\s+|NestedAssembly\\s+|NestedFamANDAssem\\s+|VisibilityMask\\s+|NestedFamORAssem\\s+|SequentialLayout\\s+|ExplicitLayout\\s+|LayoutMask\\s+|ExtendedLayout\\s+|Interface\\s+|ClassSemanticsMask\\s+|Abstract\\s+|Sealed\\s+|SpecialName\\s+|RTSpecialName\\s+|Import\\s+|Serializable\\s+|WindowsRuntime\\s+|UnicodeClass\\s+|AutoClass\\s+|StringFormatMask\\s+|CustomFormatClass\\s+|HasSecurity\\s+|ReservedMask\\s+|BeforeFieldInit\\s+|CustomFormatMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@]*)(\\s*:\\s*([a-zA-Z_@][a-zA-Z0-9_@]*))?\\n"
+      "match": "^[ \\t]*((NotPublic\\s+|AutoLayout\\s+|AnsiClass\\s+|Class\\s+|Public\\s+|NestedPublic\\s+|NestedPrivate\\s+|NestedFamily\\s+|NestedAssembly\\s+|NestedFamANDAssem\\s+|VisibilityMask\\s+|NestedFamORAssem\\s+|SequentialLayout\\s+|ExplicitLayout\\s+|LayoutMask\\s+|ExtendedLayout\\s+|Interface\\s+|ClassSemanticsMask\\s+|Abstract\\s+|Sealed\\s+|SpecialName\\s+|RTSpecialName\\s+|Import\\s+|Serializable\\s+|WindowsRuntime\\s+|UnicodeClass\\s+|AutoClass\\s+|StringFormatMask\\s+|CustomFormatClass\\s+|HasSecurity\\s+|ReservedMask\\s+|BeforeFieldInit\\s+|CustomFormatMask\\s+)*)([a-zA-Z_@][a-zA-Z0-9_@]*)(\\s*:\\s*([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*))?\\n"
     },
     "custom-attribute": {
       "patterns": [
@@ -282,7 +290,7 @@
               "name": "entity.name.variable"
             }
           },
-          "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*)\\s+([a-zA-Z_@][a-zA-Z0-9_@]*)"
+          "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*)\\s+([a-zA-Z_@][a-zA-Z0-9_@]*)"
         }
       ]
     },
@@ -363,7 +371,7 @@
                       "name": "variable.other"
                     }
                   },
-                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*)(\\.)([a-zA-Z_@][a-zA-Z0-9_@]*)"
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) ([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*)(\\.)([a-zA-Z_@][a-zA-Z0-9_@]*)"
                 }
               ]
             }
@@ -397,6 +405,45 @@
                       ]
                     },
                     "5": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "7": {
+                      "name": "punctuation"
+                    },
+                    "8": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    }
+                  },
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)(\\[([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*[, ]{0,2})+\\])?\\((.*)\\)((\\/)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*))?"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "2": {
+                      "name": "keyword.other"
+                    },
+                    "3": {
+                      "patterns": [
+                        {
+                          "include": "#type"
+                        }
+                      ]
+                    },
+                    "5": {
                       "name": "punctuation"
                     },
                     "6": {
@@ -407,7 +454,7 @@
                       ]
                     }
                   },
-                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*) ([a-zA-Z_@][a-zA-Z0-9_@]*)\\((.*)\\)((\\/)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+]*))?"
+                  "match": "([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*) (\\.ctor)\\((.*)\\)((\\/)([a-zA-Z_@][a-zA-Z0-9_@\\.\\[\\]&\\*\\+`]*))?"
                 }
               ]
             }
@@ -523,26 +570,12 @@
       "name": "constant.numeric"
     },
     "string": {
+      "begin": "\"",
+      "end": "\"",
+      "name": "string.quoted.double",
       "patterns": [
         {
-          "begin": "\"",
-          "end": "\"",
-          "name": "string.quoted.double",
-          "patterns": [
-            {
-              "include": "#string-escaped-char"
-            }
-          ]
-        },
-        {
-          "begin": "'",
-          "end": "'",
-          "name": "string.quoted.single",
-          "patterns": [
-            {
-              "include": "#string-escaped-char"
-            }
-          ]
+          "include": "#string-escaped-char"
         }
       ]
     },
