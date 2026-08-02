@@ -28,7 +28,7 @@ static class BBLangIL
 
         repository["instruction"] = new Pattern()
         {
-            Match = "([0-9]+:)[ \\t]+([a-zA-Z0-9]+)[ \\t]*([a-zA-Z0-9\\[\\] \\<\\>\\+\\-]*)",
+            Match = @"^\s*([0-9]+:)[ \t]+([a-zA-Z0-9]+)[ \t]*([a-zA-Z0-9\[\] \<\>\+\-]*)",
             Captures = new()
             {
                 { 1, new(Name.Comment) },
