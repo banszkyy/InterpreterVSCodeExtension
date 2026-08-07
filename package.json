@@ -1,9 +1,9 @@
 {
     "name": "bblang",
-    "description": "Language client for my programming language",
+    "description": "Extension for BBLang",
     "author": "Bánszky",
-    "version": "0.0.2405",
-    "displayName": "BBlang",
+    "version": "0.0.2608",
+    "displayName": "BBLang",
     "private": true,
     "preview": true,
     "engines": {
@@ -17,9 +17,8 @@
     "keywords": [
         "bblang",
         "bbc",
-        "banszky",
-        "embedded",
-        "language"
+        "bbl",
+        "banszky"
     ],
     "pricing": "Free",
     "publisher": "banszky",
@@ -37,7 +36,7 @@
     "main": "./out/extension",
     "contributes": {
         "configuration": {
-            "title": "BBlang",
+            "title": "BBLang",
             "type": "object",
             "properties": {
                 "bblang.server.path": {
@@ -66,7 +65,7 @@
             {
                 "id": "bbc",
                 "aliases": [
-                    "BBlang",
+                    "BBLang",
                     "bbc"
                 ],
                 "extensions": [
@@ -171,7 +170,7 @@
         "commands": [
             {
                 "command": "bbc.debugEditorContents",
-                "category": "BBlang",
+                "category": "BBLang",
                 "title": "Debug File",
                 "enablement": "!inDebugMode",
                 "icon": "$(debug-alt)",
@@ -179,7 +178,7 @@
             },
             {
                 "command": "bbc.executeEditorContents",
-                "category": "BBlang",
+                "category": "BBLang",
                 "title": "Run File",
                 "shortTitle": "Run File",
                 "icon": "$(run)",
@@ -187,13 +186,13 @@
             },
             {
                 "command": "bbc.update",
-                "category": "BBlang",
+                "category": "BBLang",
                 "title": "Update Binaries",
                 "when": "!virtualWorkspace"
             },
             {
                 "command": "bbc.languageServer.restart",
-                "category": "BBlang",
+                "category": "BBLang",
                 "title": "Restart Language Server"
             }
         ],
@@ -209,7 +208,7 @@
                 "languages": [
                     "bbc"
                 ],
-                "label": "BBlang Debug",
+                "label": "BBLang Debug",
                 "configurationAttributes": {
                     "launch": {
                         "required": [
@@ -245,7 +244,7 @@
                 ],
                 "configurationSnippets": [
                     {
-                        "label": "BBlang Debug: Launch",
+                        "label": "BBLang Debug: Launch",
                         "description": "A new configuration for 'debugging' a user selected file.",
                         "body": {
                             "type": "bbc",
