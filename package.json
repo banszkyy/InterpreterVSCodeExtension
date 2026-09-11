@@ -177,6 +177,14 @@
                 "when": "resourceLangId == bbc && !virtualWorkspace"
             },
             {
+                "command": "bbc.profileEditorContents",
+                "category": "BBLang",
+                "title": "Profile File",
+                "enablement": "!inDebugMode",
+                "icon": "$(flame)",
+                "when": "resourceLangId == bbc && !virtualWorkspace"
+            },
+            {
                 "command": "bbc.executeEditorContents",
                 "category": "BBLang",
                 "title": "Run File",
@@ -194,6 +202,22 @@
                 "command": "bbc.languageServer.restart",
                 "category": "BBLang",
                 "title": "Restart Language Server"
+            },
+            {
+                "command": "bbc.profiling.start",
+                "category": "BBLang",
+                "title": "Start profiling active debug session",
+                "when": "inDebugMode && debugType == 'bbc'",
+                "icon": "$(flame)",
+                "shortTitle": "Start profiling"
+            },
+            {
+                "command": "bbc.profiling.stop",
+                "category": "BBLang",
+                "title": "Stop profiling active debug session",
+                "when": "inDebugMode && debugType == 'bbc'",
+                "icon": "$(flame)",
+                "shortTitle": "Stop profiling"
             }
         ],
         "breakpoints": [
@@ -280,9 +304,26 @@
                     "when": "resourceLangId == bbc && !virtualWorkspace"
                 },
                 {
+                    "command": "bbc.profileEditorContents",
+                    "group": "bbc",
+                    "when": "resourceLangId == bbc && !virtualWorkspace"
+                },
+                {
                     "command": "bbc.executeEditorContents",
                     "group": "bbc",
                     "when": "resourceLangId == bbc && !virtualWorkspace"
+                }
+            ],
+            "debug/toolBar": [
+                {
+                    "command": "bbc.profiling.start",
+                    "when": "debugType == 'bbc' && !bbc.isProfiling",
+                    "group": "navigation"
+                },
+                {
+                    "command": "bbc.profiling.stop",
+                    "when": "debugType == 'bbc' && bbc.isProfiling",
+                    "group": "navigation"
                 }
             ]
         },

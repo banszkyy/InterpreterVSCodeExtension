@@ -10,7 +10,7 @@ import { log } from './extension'
 import * as config from './config'
 import * as fs from 'fs'
 
-let client: LanguageClientManager | null = null
+export let client: LanguageClientManager | null = null
 
 export function activate(context: vscode.ExtensionContext) {
     startServer(context)
@@ -67,7 +67,7 @@ export type LanguageClientManagerOptions = {
 }
 
 export class LanguageClientManager implements Disposable {
-    private readonly client: LanguageClient
+    readonly client: LanguageClient
     private readonly context: vscode.ExtensionContext
     private readonly outputChannel: vscode.LogOutputChannel
 

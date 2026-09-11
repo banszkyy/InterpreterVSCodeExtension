@@ -64,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
                     log.error(error)
                 },
                 onExit(code, signal) {
-                    log.debug(`[Debugger] Exit code: ${code} signal: ${signal}`)
+                    log.debug(`[Debugger] Exited { code: ${code}, signal: ${signal} }`)
                 },
             }
         }
@@ -119,6 +119,41 @@ export function activate(context: vscode.ExtensionContext) {
             })
     }))
 
+    context.subscriptions.push(vscode.commands.registerCommand(`${languageId}.profileEditorContents`, (resource: vscode.Uri | null | undefined) => {
+        log.debug('[Debugger] Try to start profiling ...')
+
+        const targetResource = resource ?? vscode.window.activeTextEditor?.document.uri ?? null
+        if (!targetResource) {
+            vscode.window.showErrorMessage(`No document opened for profiling`)
+            return
+        }
+
+        log.trace('[Debugger] Resource:', targetResource)
+
+        const workspaceFolder = vscode.workspace.getWorkspaceFolder(targetResource)
+
+        log.trace('[Debugger] Start profiling ...')
+        vscode.debug.startDebugging(workspaceFolder, {
+            type: languageId,
+            name: 'Profile Editor Contents',
+            request: 'launch',
+            program: targetResource.fsPath,
+            stopOnEntry: false,
+            noDebug: false,
+            profile: true,
+        })
+            .then(result => {
+                if (!result) {
+                    vscode.window.showErrorMessage('Failed to start profiling')
+                    log.warn('[Debugger] Failed to start profiling')
+                } else {
+                    log.info('[Debugger] Profiling started')
+                }
+            }, error => {
+                log.error(`[Debugger] Failed to start profiling`, error)
+            })
+    }))
+
     context.subscriptions.push(vscode.commands.registerCommand(`${languageId}.executeEditorContents`, (resource: vscode.Uri | null | undefined) => {
         log.debug('[Debugger] Try to start debugging (no debug) ...')
 
@@ -156,7 +191,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.debug.onDidStartDebugSession(e => log.trace('[Debugger] Debug session started:', e))
     vscode.debug.onDidChangeActiveDebugSession(e => log.trace('[Debugger] Active debug session changed:', e))
     vscode.debug.onDidTerminateDebugSession(e => log.trace('[Debugger] Debug session terminated:', e))
-    vscode.debug.onDidReceiveDebugSessionCustomEvent(e => log.trace('[Debugger] Custom event received:', e))
+    //vscode.debug.onDidReceiveDebugSessionCustomEvent(e => log.trace('[Debugger] Custom event received:', e))
     vscode.debug.onDidChangeBreakpoints(e => log.trace('[Debugger] Breakpoints changed:', e))
 
     const outputChannel = vscode.window.createOutputChannel("BBLang Debug Host", { log: true })
@@ -173,7 +208,6 @@ export function activate(context: vscode.ExtensionContext) {
             }
         }
     })
-
 
     log.info('[Debugger] Debugger activated')
 }

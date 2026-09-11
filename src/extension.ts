@@ -6,6 +6,7 @@ import * as config from './config'
 import { isVirtualWorkspace, languageId } from './utils'
 import * as notebookSerializer from './notebook-serializer'
 import * as notebookController from './notebook-controller'
+import * as profiling from './profiling'
 
 export let log: vscode.LogOutputChannel
 const checkForUpdates = true
@@ -17,10 +18,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (!isVirtual) {
         debuggerClient.activate(context)
+        profiling.activate(context)
     }
 
     languageClient.activate(context)
-
     notebookSerializer.activate(context)
     notebookController.activate(context)
 
