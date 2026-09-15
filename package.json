@@ -2,7 +2,7 @@
     "name": "bblang",
     "description": "Extension for BBLang",
     "author": "Bánszky",
-    "version": "0.0.2608",
+    "version": "0.1.0",
     "displayName": "BBLang",
     "private": true,
     "preview": true,
@@ -365,7 +365,7 @@
         "vsce": "^2.15.0"
     },
     "dependencies": {
-        "adm-zip": "^0.5.17",
+        "adm-zip": "^0.6.0",
         "vscode-jsonrpc": "^8.2.1",
         "vscode-languageclient": "^10.0.1"
     },
